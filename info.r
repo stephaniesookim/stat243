@@ -1,0 +1,5 @@
+name = "Stephanie Kim"
+SID = "25937115"
+email = "soo.kim@berkeley.edu"
+github_name = "stephaniesookim"
+status = "enrolled"
