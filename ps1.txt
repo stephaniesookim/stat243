@@ -1,0 +1,140 @@
+﻿Stat243: Problem Set 1
+Stephanie Kim
+
+
+Problem 1
+I filled out the survey!
+_______________________________________________________________________________________________________________________
+
+Problem 2
+
+(a)
+##This is the command that was in the unit. It turns out that there is one processor labeled as 0.
+oski@BCE:~$ grep processor /proc/cpuinfo
+
+##or 
+
+##We can use wc to see how many processor there is.
+oski@BCE:~$ grep processor /proc/cpuinfo | wc -l
+
+(b)
+##This command tells us there are 1017868 memory.
+oski@BCE:~$ free
+             total       used       free     shared    buffers     cached
+Mem:       1017868     488164     529704       2848      12972     329532
+-/+ buffers/cache:     145660     872208
+Swap:      1048572      96832     951740
+_______________________________________________________________________________________________________________________
+
+Problem 3
+
+(a)
+(i)
+## First we download the cdv file from the website and save it as Candidate.csv
+oski@BCE:~$ wget -O Candidate.csv http://www.fec.gov/data/CandidateSummary.do?format=csv
+## Then we grep “S” from Candidate.csv and pass the outcome as the input to the next grep that finds “DEM”. We save the filtered file as DEM.csv
+oski@BCE:~$ grep ‘“S”’ Candidate.csv | grep ‘“DEM”’ > DEM.csv
+## We do the same thing to REP.
+oski@BCE:~$ grep ‘“S”’ Candidate.csv | grep ‘“REP”’ > REP.csv
+
+(ii)
+## Remove any comma not preceded by “ or another comma from DEM.csv and save it as DEM2.csv
+oski@BCE:~$ sed 's/\([^",]\),/\1/g' DEM.csv > DEM2.csv
+## Remove $ and “ from DEM2.csv
+oski@BCE:~$ sed -i 's/[$"]//g' DEM2.csv
+## We do the same thing to REP.csv and save it as REP2.csv
+oski@BCE:~$ sed 's/\([^",]\),/\1/g' REP.csv > REP2.csv
+## We do the same thing to REP2.csv
+oski@BCE:~$ sed -i 's/[$"]//g' REP2.csv
+
+## Extract the 2nd, 3rd, 20th column of DEM2.csv and save it as DEM3.csv
+oski@BCE:~$ cut -d',' -f2,3,20 DEM2.csv  > DEM3.csv
+## Then sort the 3rd key (column) in reverse order and save it as DEM4.csv
+oski@BCE:~$ sort -t"," -n -k3 -r DEM3.csv > DEM4.csv
+## We do the same thing to REP2 and save it as REP3.csv
+oski@BCE:~$ cut -d',' -f2,3,20 REP2.csv > REP3.csv
+## We do the same thing to REP3.csv and save it as REP4.csv
+oski@BCE:~$ sort -t"," -n -k3 -r REP3.csv > REP4.csv
+
+## List the first 5 items of DEM4.csv. Since we lined up the items, this will show the candidates with largest total contribution.
+oski@BCE:~$ head -n5 DEM4.csv
+## We do the same thing to REP4.csv.
+oski@BCE:~$ head -n5 REP4.csv
+
+
+(b)
+## First we get the cn14.zip file from the website.
+oski@BCE:~$ wget ftp://ftp.fec.gov/FEC/2014/cn14.zip
+## We also get the indiv14.zip file from the website
+oski@BCE:~$ wget ftp://ftp.fec.gov/FEC/2014/indiv14.zip
+## Then unzip the zip file.
+oski@BCE:~$ unzip cn14.zip
+## Doing the same thing.
+oski@BCE:~$ unzip indiv14.zip
+
+## We set a function ID that grep the 1st parameter (in this case last name) from cn.txt and extract the element in 10th column. This result will be saved as a variable called ID.
+function ID() 
+{
+ID=$(grep "$1" cn.txt | cut -d"|" -f10,10) 
+}
+
+## We set a function NContr that take ID as input and get the number of contributions nationwide as a result
+oski@BCE:~$ function NContr() { NContr=$(cut -d"|" -f1,1 itcont.txt | grep "$1" | wc -l); }
+
+## We set a function CContr that take ID as input and get the number of contributions in California as a result
+oski@BCE:~$ function CContr() { CContr=$(cut -d"|" -f1,10 itcont.txt | grep "$1" | grep "CA" | wc -l); }
+
+## For example if we say ID “MCCONELL, MITCH”, the function will get the element in 10th column that corresponds to MCCONELL, MITCH.
+oski@BCE:~$ ID "MCCONNELL, MITCH"
+## To see the result, we echo the result, which we set as the variable ID.
+oski@BCE:~$ echo $ID
+
+## By using the ID number we found above as the input, the function NContr finds that there are 6751 contributions to Mitch McConnel nationwide.
+oski@BCE:~$ NContr "$ID"
+oski@BCE:~$ echo $NContr
+
+## By using the ID number we found above as the input, the function CContr finds that there are 288 contributions to Mitch McConnel in California.
+oski@BCE:~$ CContr "$ID"
+oski@BCE:~$ echo $CContr
+
+## We do the same thing to find the ID of “GRIMES, ALISON”.
+oski@BCE:~$ ID "GRIMES, ALISON"
+## We do the same thing to see the result
+oski@BCE:~$ echo $ID
+
+## By using the ID number we found above as the input, the function NContr finds that there are 6452 contributions to Alison Grimes nationwide.
+oski@BCE:~$ NContr "$ID"
+oski@BCE:~$ echo $NContr
+
+## By using the ID number we found above as the input, the function CContr finds that there are 1026 contributions to Alison Grimes in California.
+oski@BCE:~$ CContr "$ID"
+oski@BCE:~$ echo $CContr
+
+
+______________________________________________________________________________________________________________________
+
+Problem 4
+
+## First we download the list of files and save it as Climate.txt
+oski@BCE:~$ wget -O Climate.txt http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/
+
+## Then we grep .txt from Climate.txt and save it as Climate2.txt
+oski@BCE:~$ grep .txt Climate.txt > Climate2.txt
+
+## Remove anything but the name of the files and save it to variable Climatetxt
+oski@BCE:~$ Climatetxt=$(cut -d'<' -f7 Climate2.txt | cut -d'>' -f2)
+
+## Show Climatetxt
+oski@BCE:~$ echo $Climatetxt
+
+## Then we download the files that are in the list in Climatetxt
+oski@BCE:~$ for file in $Climatetxt
+> do
+> wget http://www1.ncdc.noaa.gov/pub/data/ghcn/daily/$file
+> echo $file
+> done
+______________________________________________________________________________________________________________________
+
+Problem 5
+
+In the Rtex file.

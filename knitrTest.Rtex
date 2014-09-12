@@ -1,0 +1,26 @@
+
+\documentclass{article}
+\usepackage{graphicx}
+%% for inline R code: if the inline code is not correctly parsed, you will see a message
+\newcommand{\rinline}[1]{SOMETHING WRONG WITH knitr}
+%% begin.rcode setup, include=FALSE
+% opts_chunk$set(fig.path='figure/latex-', cache.path='cache/latex-')
+%% end.rcode
+
+\begin{document}
+%% begin.rcode, include=FALSE
+% years<-attributes(LakeHuron)$tsp[c(1,2)]
+%% end.rcode
+
+The height of the water level in Lake Huron fluctuates over time. Here I 'analyze' the variation using R. I show a histogram of the lake levels for the period \rinline{years[1]} to \rinline{years[2]}.
+
+%% begin.rcode fig.width=7, fig.height=7, out.width='.5\\textwidth'
+% hist(LakeHuron)
+%% end.rcode
+
+%% begin.rcode
+% lowHi<-c(which.min(LakeHuron),which.max(LakeHuron))
+% yearExtrema<-attributes(LakeHuron)$tsp[1]-1+lowHi
+%% end.rcode
+
+\end{document}
