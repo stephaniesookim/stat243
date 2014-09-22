@@ -1,0 +1,265 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/stat243-fall-2014//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=0.75in,bmargin=0.75in,lmargin=0.75in,rmargin=0.75in}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat243}
+
+
+\title{Problem Set 2}
+
+
+\author{Stephanie Kim}
+
+\maketitle
+\raggedright
+
+
+\section*{Problem 1}
+
+Download the zipped csv file from the URL provided in the problem
+set and save it at the directory.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{url}\hlkwb{=}\hlstr{"http://www.stat.berkeley.edu/share/paciorek/AirlineData2006-2008.csv.bz2"}
+\hlkwd{download.file}\hlstd{(url,} \hlkwc{destfile}\hlstd{=}\hlstr{"/Users/stephaniekim/stat243-fall-2014/AirlineData.bz2"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Without unzipping, we open a connection that can read the file AirlineData.bz2
+to AirlineData.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{AirlineData} \hlkwb{<-} \hlkwd{bzfile}\hlstd{(}\hlstr{"AirlineData.bz2"}\hlstd{,} \hlkwc{open}\hlstd{=}\hlstr{"r"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Since the file is too huge, we are going to read the file block by
+block.
+
+To set the size of the blocks, we first measure how many rows there
+are in this file.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## We randomly assign the size of block we are reading as 20000 lines.}
+\hlcom{## So we are reading 20000 lines at a time.}
+
+\hlstd{randomblocks} \hlkwb{<-} \hlnum{20000}
+
+\hlcom{## Then we set the initial value of the variable lines as 0.}
+
+\hlstd{lines} \hlkwb{<-} \hlnum{0}
+
+\hlcom{## Add the number of lines to the initial value until there is no remaining lines to count. }
+\hlcom{##Once we count 20000, we add 20000 to the previous value of lines.}
+
+\hlstd{(}\hlkwa{while}\hlstd{((linesadd} \hlkwb{<-} \hlkwd{length}\hlstd{(}\hlkwd{readLines}\hlstd{(AirlineData,randomblocks)))} \hlopt{>} \hlnum{0} \hlstd{)    lines} \hlkwb{<-} \hlstd{lines}\hlopt{+}\hlstd{linesadd)}
+
+\hlcom{## Then we should subtract one line since we are not counting the header.}
+
+\hlstd{lines}\hlkwb{=}\hlstd{lines}\hlopt{-}\hlnum{1}
+
+\hlcom{## After this we have to close the connection.}
+
+\hlkwd{close}\hlstd{(AirlineData)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Now we choose the number of blocks we are going to use.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## Print the value of lines which is the number of rows in our file; 21604867.}
+
+\hlstd{lines}
+
+\hlcom{## Now we know how many rows we have. I decided to set my block as 30000.}
+
+\hlstd{blocks}\hlkwb{=}\hlnum{30000}
+
+\hlcom{## Make a variable itrNums=the ceiling of lines/blocks.}
+
+\hlstd{itrNums} \hlkwb{<-} \hlkwd{ceiling}\hlstd{(lines}\hlopt{/}\hlstd{blocks)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Then we open the connections.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## We open the connection that can read the file AirlineData.bz2 to AirlineData2 again. }
+
+\hlstd{AirlineData2} \hlkwb{<-} \hlkwd{bzfile}\hlstd{(}\hlstr{"AirlineData.bz2"}\hlstd{,} \hlkwc{open}\hlstd{=}\hlstr{"r"}\hlstd{)}
+
+\hlcom{## This time, we open the connection that can write data to the 3 files.}
+\hlcom{## We will save the output of the for loop later.}
+\hlcom{## We are making it 3 so that we can save data for each 3 years separately.}
+
+\hlstd{Air2006} \hlkwb{<-} \hlkwd{bzfile}\hlstd{(}\hlstr{"SFO2006.csv.bz2"}\hlstd{,} \hlkwc{open}\hlstd{=}\hlstr{"w"}\hlstd{)}
+\hlstd{Air2007} \hlkwb{<-} \hlkwd{bzfile}\hlstd{(}\hlstr{"SFO2007.csv.bz2"}\hlstd{,} \hlkwc{open}\hlstd{=}\hlstr{"w"}\hlstd{)}
+\hlstd{Air2008} \hlkwb{<-} \hlkwd{bzfile}\hlstd{(}\hlstr{"SFO2008.csv.bz2"}\hlstd{,} \hlkwc{open}\hlstd{=}\hlstr{"w"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Let's run a for loop.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## Now we run a for loop for i=1,2,...,itrNums(# of rows divided by # of blocks.}
+
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{itrNums) \{}
+
+\hlcom{## We read the AirlineData.bz2 through the connection AirlineData2 and save it to the data frame Airline.}
+
+  \hlstd{Airline}\hlkwb{<-}\hlkwd{read.table}\hlstd{(AirlineData2,} \hlkwc{header} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{nrows} \hlstd{= blocks)}
+
+\hlcom{## Subset the data frame Airline by finding SFO in 18th column and save it another data frame SFOAirline.}
+
+ \hlstd{SFOAirline}\hlkwb{<-}\hlstd{Airline[}\hlkwd{which}\hlstd{(}\hlkwd{as.character}\hlstd{(Airline[,}\hlnum{18}\hlstd{])}\hlopt{==}\hlstr{"SFO"}\hlstd{),]}
+
+\hlcom{## Stratify the data frame SFOAirline by categorizing whether the 1st column is 2006,2007, or 2008 and save them into different data frames.}
+
+\hlstd{SFO2006}\hlkwb{<-}\hlstd{SFOAirline[}\hlkwd{which}\hlstd{(SFOAirline[,}\hlnum{1}\hlstd{]}\hlopt{==}\hlstr{"2006"}\hlstd{),]}
+
+\hlstd{SFO2007}\hlkwb{<-}\hlstd{SFOAirline[}\hlkwd{which}\hlstd{(SFOAirline[,}\hlnum{1}\hlstd{]}\hlopt{==}\hlstr{"2007"}\hlstd{),]}
+
+\hlstd{SFO2008}\hlkwb{<-}\hlstd{SFOAirline[}\hlkwd{which}\hlstd{(SFOAirline[,}\hlnum{1}\hlstd{]}\hlopt{==}\hlstr{"2008"}\hlstd{),]}
+
+\hlcom{## Now we write a table based on the data frames.}
+
+\hlkwd{write.table}\hlstd{(SFO2006,} \hlkwc{file}\hlstd{=Air2006,} \hlkwc{append}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{quote}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{sep}\hlstd{=}\hlstr{","}\hlstd{,} \hlkwc{row.names}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{col.names}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+
+\hlkwd{write.table}\hlstd{(SFO2007,} \hlkwc{file}\hlstd{=Air2007,} \hlkwc{append}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{quote}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{sep}\hlstd{=}\hlstr{","}\hlstd{,} \hlkwc{row.names}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{col.names}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+
+\hlkwd{write.table}\hlstd{(SFO2008,} \hlkwc{file}\hlstd{=Air2008,} \hlkwc{append}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{quote}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{sep}\hlstd{=}\hlstr{","}\hlstd{,} \hlkwc{row.names}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{col.names}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+
+ \hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+Lastly, we need to close the connection.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{close}\hlstd{(Air2006)}
+
+\hlkwd{close}\hlstd{(Air2007)}
+
+\hlkwd{close}\hlstd{(Air2008)}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Problem 2}
+
+(a) MyFuns is a vector of 3 function outcomes. Since j is not in the
+for loop of MyFuns function, it does not go through the loop but just
+return a vector of 3 function outcomes. And here we can observe that
+in the for loop, the outcome is 1 when i=1, and it is updated to 2
+when i=2, and it is updated again to 3 when i=3. So the final outcome
+is 3. Thus, the result of the first evaluation is the vector of 3
+function outcomes of which the each entry is the final outcome, 3.
+
+(b) In this case, since i is in the for loop, it does go through the
+loop. So the result of the second evaluation is the vector of 3 functions
+where the first entry is return(i=1)=1, the second entry is return(i=2)=2,
+and the third entry is return(i=3)=3. The value of \textquoteleft i\textquoteright{}
+is being found from global environment.
+
+(c) myFuns is a vector of length 3. Since our final function is processed
+after for loop of f{[}{[}i{]}{]} function, all 3 entries of myFuns
+vector are the final result of the for loop (just like in 2(a)). Thus,
+all entries are i=3. Therefore, regardless of whether we are using
+i or j as an iteration variable, the result is a vector of length
+3 with each entry=3. The value of \textquoteleft i\textquoteright{}
+is being found from local environment.
+
+
+\section*{Problem 3}
+
+The frame number 0 is the global environment. All variables, functions
+and objects exist. 
+
+The frame number 1 is the environment defined by sapply. Only function
+(x) and variables 0 to 3 exist. 
+
+The frame number 2 is the environment defined by function function(x).
+Only function ls(x) and the variable x exist. 
+
+The frame number 3 is the environment defined by ls() function. Only
+variable x exist.
+\end{document}

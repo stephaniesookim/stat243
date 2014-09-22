@@ -1,0 +1,776 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 0.75in
+\topmargin 0.75in
+\rightmargin 0.75in
+\bottommargin 0.75in
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Stat243
+\end_layout
+
+\begin_layout Title
+Problem Set 2
+\end_layout
+
+\begin_layout Author
+Stephanie Kim
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+raggedright
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Problem 1
+\end_layout
+
+\begin_layout Standard
+Download the zipped csv file from the URL provided in the problem set and
+ save it at the directory.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+url="http://www.stat.berkeley.edu/share/paciorek/AirlineData2006-2008.csv.bz2"
+\end_layout
+
+\begin_layout Plain Layout
+
+download.file(url, destfile="/Users/stephaniekim/stat243-fall-2014/AirlineData.bz2
+")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Without unzipping, we open a connection that can read the file AirlineData.bz2
+ to AirlineData.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+AirlineData <- bzfile("AirlineData.bz2", open="r")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Since the file is too huge, we are going to read the file block by block.
+\end_layout
+
+\begin_layout Standard
+To set the size of the blocks, we first measure how many rows there are
+ in this file.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## We randomly assign the size of block we are reading as 20000 lines.
+\end_layout
+
+\begin_layout Plain Layout
+
+## So we are reading 20000 lines at a time.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+randomblocks <- 20000
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Then we set the initial value of the variable lines as 0.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+lines <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Add the number of lines to the initial value until there is no remaining
+ lines to count.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+##Once we count 20000, we add 20000 to the previous value of lines.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+(while((linesadd <- length(readLines(AirlineData,randomblocks))) > 0 ) 
+   lines <- lines+linesadd)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Then we should subtract one line since we are not counting the header.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+lines=lines-1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## After this we have to close the connection.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+close(AirlineData)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now we choose the number of blocks we are going to use.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Print the value of lines which is the number of rows in our file; 21604867.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+lines
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Now we know how many rows we have.
+ I decided to set my block as 30000.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+blocks=30000
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Make a variable itrNums=the ceiling of lines/blocks.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+itrNums <- ceiling(lines/blocks)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Then we open the connections.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## We open the connection that can read the file AirlineData.bz2 to AirlineData2
+ again.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+AirlineData2 <- bzfile("AirlineData.bz2", open="r")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## This time, we open the connection that can write data to the 3 files.
+\end_layout
+
+\begin_layout Plain Layout
+
+## We will save the output of the for loop later.
+\end_layout
+
+\begin_layout Plain Layout
+
+## We are making it 3 so that we can save data for each 3 years separately.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+Air2006 <- bzfile("SFO2006.csv.bz2", open="w")
+\end_layout
+
+\begin_layout Plain Layout
+
+Air2007 <- bzfile("SFO2007.csv.bz2", open="w")
+\end_layout
+
+\begin_layout Plain Layout
+
+Air2008 <- bzfile("SFO2008.csv.bz2", open="w")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Let's run a for loop.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Now we run a for loop for i=1,2,...,itrNums(# of rows divided by # of blocks.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 1:itrNums) {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## We read the AirlineData.bz2 through the connection AirlineData2 and save
+ it to the data frame Airline.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  Airline<-read.table(AirlineData2, header = TRUE, sep = ",", nrows = blocks)
+    
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Subset the data frame Airline by finding SFO in 18th column and save
+ it another data frame SFOAirline.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ SFOAirline<-Airline[which(as.character(Airline[,18])=="SFO"),]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Stratify the data frame SFOAirline by categorizing whether the 1st column
+ is 2006,2007, or 2008 and save them into different data frames.
+\end_layout
+
+\begin_layout Plain Layout
+
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+SFO2006<-SFOAirline[which(SFOAirline[,1]=="2006"),]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+SFO2007<-SFOAirline[which(SFOAirline[,1]=="2007"),]   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+SFO2008<-SFOAirline[which(SFOAirline[,1]=="2008"),]    
+\end_layout
+
+\begin_layout Plain Layout
+
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+## Now we write a table based on the data frames.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+write.table(SFO2006, file=Air2006, append=TRUE, quote=FALSE, sep=",", row.names=FA
+LSE, col.names=FALSE)   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+write.table(SFO2007, file=Air2007, append=TRUE, quote=FALSE, sep=",", row.names=FA
+LSE, col.names=FALSE)   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+write.table(SFO2008, file=Air2008, append=TRUE, quote=FALSE, sep=",", row.names=FA
+LSE, col.names=FALSE) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ } 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Lastly, we need to close the connection.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+close(Air2006)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+close(Air2007)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+close(Air2008)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Problem 2
+\end_layout
+
+\begin_layout Standard
+(a) MyFuns is a vector of 3 function outcomes.
+ Since j is not in the for loop of MyFuns function, it does not go through
+ the loop but just return a vector of 3 function outcomes.
+ And here we can observe that in the for loop, the outcome is 1 when i=1,
+ and it is updated to 2 when i=2, and it is updated again to 3 when i=3.
+ So the final outcome is 3.
+ Thus, the result of the first evaluation is the vector of 3 function outcomes
+ of which the each entry is the final outcome, 3.
+\end_layout
+
+\begin_layout Standard
+(b) In this case, since i is in the for loop, it does go through the loop.
+ So the result of the second evaluation is the vector of 3 functions where
+ the first entry is return(i=1)=1, the second entry is return(i=2)=2, and
+ the third entry is return(i=3)=3.
+ The value of ‘i’ is being found from global environment.
+\end_layout
+
+\begin_layout Standard
+(c) myFuns is a vector of length 3.
+ Since our final function is processed after for loop of f[[i]] function,
+ all 3 entries of myFuns vector are the final result of the for loop (just
+ like in 2(a)).
+ Thus, all entries are i=3.
+ Therefore, regardless of whether we are using i or j as an iteration variable,
+ the result is a vector of length 3 with each entry=3.
+ The value of ‘i’ is being found from local environment.
+\end_layout
+
+\begin_layout Section*
+Problem 3
+\end_layout
+
+\begin_layout Standard
+The frame number 0 is the global environment.
+ All variables, functions and objects exist.
+ 
+\end_layout
+
+\begin_layout Standard
+The frame number 1 is the environment defined by sapply.
+ Only function (x) and variables 0 to 3 exist.
+ 
+\end_layout
+
+\begin_layout Standard
+The frame number 2 is the environment defined by function function(x).
+ Only function ls(x) and the variable x exist.
+ 
+\end_layout
+
+\begin_layout Standard
+The frame number 3 is the environment defined by ls() function.
+ Only variable x exist.
+\end_layout
+
+\end_body
+\end_document
