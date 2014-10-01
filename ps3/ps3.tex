@@ -1,0 +1,248 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/stat243-fall-2014//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat243}
+
+
+\title{Problem Set 3}
+
+
+\author{Stephanie Kim}
+
+\maketitle
+/raggedright
+
+
+\section*{Part (a)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## get the source code of the URL}
+\hlstd{html}\hlkwb{<-}\hlkwd{getURL}\hlstd{(}\hlstr{"http://www.presidency.ucsb.edu/sou.php"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}getURL"{}}}\begin{alltt}
+\hlcom{## this command gets rid of unnecessary spaces }
+\hlstd{clean}\hlkwb{<-}\hlkwd{htmlParse}\hlstd{(html)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}htmlParse"{}}}\begin{alltt}
+\hlcom{## grep the parts that starts with <td and ends with a> and that the class is doclist}
+\hlstd{vector}\hlkwb{<-}\hlkwd{xpathSApply}\hlstd{(clean,}\hlstr{"//td[@class='doclist']//a"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "{}xpathSApply"{}}}\begin{alltt}
+\hlcom{## grep the parts that come after href }
+\hlstd{url}\hlkwb{<-}\hlkwd{sapply}\hlstd{(vector, xmlGetAttr,}\hlstr{"href"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'xmlGetAttr' not found}}\begin{alltt}
+\hlcom{## get rid of duplicate elements }
+\hlstd{url}\hlkwb{<-}\hlkwd{unique}\hlstd{(url)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: unique() applies only to vectors}}\begin{alltt}
+\hlcom{## get rid of the first element since the it is not a url }
+\hlstd{url}\hlkwb{<-}\hlstd{url[}\hlnum{2}\hlopt{:}\hlkwd{length}\hlstd{(url)]}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object of type 'closure' is not subsettable}}\end{kframe}
+\end{knitrout}
+
+
+\section*{Part (b)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## this function returns the body and title of the speech}
+
+\hlstd{extract}\hlkwb{<-}\hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+        \hlstd{htmlspeech}\hlkwb{<-}\hlkwd{getURL}\hlstd{(u)}
+        \hlstd{cleanspeech}\hlkwb{<-}\hlkwd{htmlParse}\hlstd{(}\hlkwd{str_replace_all}\hlstd{(htmlspeech,}\hlstr{"<p>"}\hlstd{,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{))}
+        \hlstd{speechbody}\hlkwb{<-}\hlkwd{xpathSApply}\hlstd{(cleanspeech,}\hlstr{"//span[@class='displaytext']"}\hlstd{,xmlValue)}
+        \hlstd{speechtitle}\hlkwb{<-}\hlkwd{xpathSApply}\hlstd{(cleanspeech,} \hlstr{"//meta[@name='title']"}\hlstd{)}
+        \hlstd{speechtitle}\hlkwb{<-}\hlkwd{sapply}\hlstd{(speechtitle,xmlGetAttr,}\hlstr{"content"}\hlstd{)}
+        \hlstd{ret1}\hlkwb{<-}\hlkwd{list}\hlstd{(speechbody,speechtitle)}
+        \hlkwd{return}\hlstd{(ret1)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(c)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## this function returns the count of laughter and applause}
+\hlcom{## it also returns the body of the speech with laughter and applause eliminated}
+
+\hlstd{laughterapplause} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+        \hlstd{laughter} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Laughter\textbackslash{}\textbackslash{}]"}\hlstd{))}
+        \hlstd{applause} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Applause\textbackslash{}\textbackslash{}]"}\hlstd{))}
+        \hlstd{stripout} \hlkwb{<-} \hlkwd{str_replace_all}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Laughter\textbackslash{}\textbackslash{}][[:space:]]"}\hlstd{),}\hlstr{"\textbackslash{}\textbackslash{}1"}\hlstd{)}
+        \hlstd{stripout} \hlkwb{<-} \hlkwd{str_replace_all}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Applause\textbackslash{}\textbackslash{}][[:space:]]"}\hlstd{),}\hlstr{"\textbackslash{}\textbackslash{}1"}\hlstd{)}
+        \hlstd{ret2} \hlkwb{<-} \hlkwd{list}\hlstd{(laughter,applause, stripout)}
+        \hlkwd{return}\hlstd{(ret2)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(d)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## this function returns a vector of which each element is the words of the speech}
+\hlcom{## it also returns the number of words}
+
+\hlstd{words} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+        \hlstd{extractwords} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{" "}\hlstd{))}
+        \hlstd{countwords} \hlkwb{<-} \hlkwd{length}\hlstd{(extractwords)}
+        \hlstd{ret3} \hlkwb{<-} \hlkwd{list}\hlstd{(extractwords, countwords)}
+        \hlkwd{return}\hlstd{(ret3)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(e)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## this function returns a vector of which each element is the sentences of the speech}
+
+\hlstd{sentence} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+        \hlstd{extractsentence} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{"\textbackslash{}\textbackslash{}."}\hlstd{))}
+        \hlkwd{return}\hlstd{(extractsentence)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(f)i,ii}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## this function returns the number of words and sentences}
+\hlcom{## it also returns the average length of sentences and words}
+
+\hlstd{count} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+        \hlstd{extractwords} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{" "}\hlstd{))}
+        \hlstd{extractsentence} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{"\textbackslash{}\textbackslash{}."}\hlstd{))}
+        \hlstd{countwords} \hlkwb{<-} \hlkwd{length}\hlstd{(extractwords)}
+        \hlstd{countsentence} \hlkwb{<-} \hlkwd{length}\hlstd{(extractsentence)}
+        \hlstd{averagesentences} \hlkwb{<-} \hlstd{countwords}\hlopt{/}\hlstd{countsentence}
+        \hlstd{averagewords} \hlkwb{<-} \hlkwd{sum}\hlstd{(}\hlkwd{nchar}\hlstd{(extractwords))}\hlopt{/}\hlstd{countwords}
+        \hlstd{ret4} \hlkwb{<-} \hlkwd{list}\hlstd{(countwords, countsentence, averagesentences, averagewords)}
+        \hlkwd{return}\hlstd{(ret4)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(f)iii}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## this function returns the number of the word stems we are looking for}
+
+\hlstd{wordstems} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+        \hlstd{I} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"[^[:alpha:]]I[^[:alpha:]]"}\hlstd{))}
+        \hlstd{we} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ww]e[^[:alpha:]]"}\hlstd{)}
+        \hlstd{america} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Aa]merica[n]?[s]?[^[:alpha:]]"}\hlstd{)}
+        \hlstd{democra} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Dd]emocracy[^[:alpha:]]|[^[:alpha:]][Dd]emocratic[^[:alpha:]]"}\hlstd{)}
+        \hlstd{republic} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Rr]epublic[^[:alpha:]]"}\hlstd{)}
+        \hlstd{democrat} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Dd]emocrat[s]?[^[:alpha:]]|[^[:alpha:]][Dd]emocratic[^[:alpha:]]"}\hlstd{)}
+        \hlstd{republican} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Rr]epublican[s]?[^[:alpha:]]"}\hlstd{)}
+        \hlstd{free} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ff]ree[^[:alpha:]]|[^[:alpha:]][Ff]reedom[^[:alpha:]]"}\hlstd{)}
+        \hlstd{war} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ww]ar?[^[:alpha:]]"}\hlstd{)}
+        \hlstd{god} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Gg]od[^[:alpha:]][^bless]"}\hlstd{)}
+        \hlstd{godbless} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Gg]od[^[:alpha:]]bless"}\hlstd{)}
+        \hlstd{jcc} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]]Jesus[^[:alpha:]]|[^[:alpha:]]Christ[^[:alpha:]]|[^[:alpha:]]Christian[^[:alpha:]]"}\hlstd{)}
+        \hlstd{ret5} \hlkwb{<-} \hlkwd{list}\hlstd{(I, we, america, democra, republic, democrat, republican, free, war, god, godbless, jcc)}
+        \hlkwd{return}\hlstd{(ret5)}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part (h)}
+\end{document}

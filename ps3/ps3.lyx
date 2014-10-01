@@ -1,0 +1,1423 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.54cm
+\topmargin 2.54cm
+\rightmargin 2.54cm
+\bottommargin 2.54cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Stat243
+\end_layout
+
+\begin_layout Title
+Problem Set 3
+\end_layout
+
+\begin_layout Author
+Stephanie Kim
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+/raggedright
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Part (a)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+library(stringr) 
+\end_layout
+
+\begin_layout Plain Layout
+
+library(XML) 
+\end_layout
+
+\begin_layout Plain Layout
+
+library(bitops) 
+\end_layout
+
+\begin_layout Plain Layout
+
+library(RCurl)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## get the source code of the URL
+\end_layout
+
+\begin_layout Plain Layout
+
+html<-getURL("http://www.presidency.ucsb.edu/sou.php")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## this command gets rid of unnecessary spaces 
+\end_layout
+
+\begin_layout Plain Layout
+
+clean<-htmlParse(html) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## grep the parts that starts with <td and ends with a> and that the class
+ is doclist
+\end_layout
+
+\begin_layout Plain Layout
+
+vector<-xpathSApply(clean,"//td[@class='doclist']//a") 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## grep the parts that come after href 
+\end_layout
+
+\begin_layout Plain Layout
+
+url<-sapply(vector, xmlGetAttr,"href") 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## get rid of duplicate elements 
+\end_layout
+
+\begin_layout Plain Layout
+
+url<-unique(url) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## get rid of the first element since the it is not a url 
+\end_layout
+
+\begin_layout Plain Layout
+
+url<-url[2:length(url)]
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Part(b)~(f)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+speechinfo<-function(u){
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## (b)
+\end_layout
+
+\begin_layout Plain Layout
+
+## returns the body and title of the speech
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	htmlspeech<-getURL(u)   
+\end_layout
+
+\begin_layout Plain Layout
+
+	cleanspeech<-htmlParse(str_replace_all(htmlspeech,"<p>", "
+\backslash
+n
+\backslash
+n"))
+\end_layout
+
+\begin_layout Plain Layout
+
+	speechbody<-xpathSApply(cleanspeech,"//span[@class='displaytext']",xmlValue)
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+	speechtitle<-xpathSApply(cleanspeech, "//meta[@name='title']")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	speechtitle<-sapply(speechtitle,xmlGetAttr,"content")   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## (c) 
+\end_layout
+
+\begin_layout Plain Layout
+
+## this function returns the count of laughter and applause
+\end_layout
+
+\begin_layout Plain Layout
+
+## it also returns the body of the speech with laughter and applause eliminated
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	laughter <- str_count(speechbody,ignore.case("
+\backslash
+
+\backslash
+[Laughter
+\backslash
+
+\backslash
+]"))   
+\end_layout
+
+\begin_layout Plain Layout
+
+	applause <- str_count(speechbody,ignore.case("
+\backslash
+
+\backslash
+[Applause
+\backslash
+
+\backslash
+]"))
+\end_layout
+
+\begin_layout Plain Layout
+
+	stripout <- str_replace_all(speechbody,ignore.case("
+\backslash
+
+\backslash
+[Laughter
+\backslash
+
+\backslash
+][[:space:]]"),"
+\backslash
+
+\backslash
+1")
+\end_layout
+
+\begin_layout Plain Layout
+
+	stripout <- str_replace_all(speechbody,ignore.case("
+\backslash
+
+\backslash
+[Applause
+\backslash
+
+\backslash
+][[:space:]]"),"
+\backslash
+
+\backslash
+1")   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## (d) 
+\end_layout
+
+\begin_layout Plain Layout
+
+## this function returns a vector of which each element is the words of
+ the speech
+\end_layout
+
+\begin_layout Plain Layout
+
+## it also returns the number of words
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	extractwords <- unlist(strsplit(speechbody," "))   
+\end_layout
+
+\begin_layout Plain Layout
+
+	countwords <- length(extractwords)   
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## (e) 
+\end_layout
+
+\begin_layout Plain Layout
+
+## this function returns a vector of which each element is the sentences
+ of the speech
+\end_layout
+
+\begin_layout Plain Layout
+
+## extractsentence <- unlist(strsplit(speechbody,"
+\backslash
+
+\backslash
+.")) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## (f) i,ii
+\end_layout
+
+\begin_layout Plain Layout
+
+## this function returns the number of words and sentences
+\end_layout
+
+\begin_layout Plain Layout
+
+## it also returns the average length of sentences and words
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	extractwords <- unlist(strsplit(speechbody," "))   
+\end_layout
+
+\begin_layout Plain Layout
+
+	extractsentence <- unlist(strsplit(speechbody,"
+\backslash
+
+\backslash
+."))   
+\end_layout
+
+\begin_layout Plain Layout
+
+	countwords <- length(extractwords)   
+\end_layout
+
+\begin_layout Plain Layout
+
+	countsentence <- length(extractsentence)   
+\end_layout
+
+\begin_layout Plain Layout
+
+	averagesentences <- countwords/countsentence   
+\end_layout
+
+\begin_layout Plain Layout
+
+	averagewords <- sum(nchar(extractwords))/countwords
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## (f) iii
+\end_layout
+
+\begin_layout Plain Layout
+
+## this function returns the number of the word stems we are looking for
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	I <- str_count(speechbody,ignore.case("[^[:alpha:]]I[^[:alpha:]]"))   
+\end_layout
+
+\begin_layout Plain Layout
+
+	we <- str_count(speechbody,"[^[:alpha:]][Ww]e[^[:alpha:]]")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	america <- str_count(speechbody,"[^[:alpha:]][Aa]merica[n]?[s]?[^[:alpha:]]")
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+	democra <- str_count(speechbody,"[^[:alpha:]][Dd]emocracy[^[:alpha:]]|[^[:alpha
+:]][Dd]emocratic[^[:alpha:]]")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	republic <- str_count(speechbody,"[^[:alpha:]][Rr]epublic[^[:alpha:]]")
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+	democrat <- str_count(speechbody,"[^[:alpha:]][Dd]emocrat[s]?[^[:alpha:]]|[^[:a
+lpha:]][Dd]emocratic[^[:alpha:]]")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	republican <- str_count(speechbody,"[^[:alpha:]][Rr]epublican[s]?[^[:alpha:]]")
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+	free <- str_count(speechbody,"[^[:alpha:]][Ff]ree[^[:alpha:]]|[^[:alpha:]][Ff]r
+eedom[^[:alpha:]]")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	war <- str_count(speechbody,"[^[:alpha:]][Ww]ar?[^[:alpha:]]")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	god <- str_count(speechbody,"[^[:alpha:]][Gg]od[^[:alpha:]][^bless]") 
+  
+\end_layout
+
+\begin_layout Plain Layout
+
+	godbless <- str_count(speechbody,"[^[:alpha:]][Gg]od[^[:alpha:]]bless")
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+	jcc <- str_count(speechbody,"[^[:alpha:]]Jesus[^[:alpha:]]|[^[:alpha:]]Christ[^
+[:alpha:]]|[^[:alpha:]]Christian[^[:alpha:]]")
+\end_layout
+
+\begin_layout Plain Layout
+
+	income <- str_count(speechbody,"[^[:alpha:]][Ii]ncome[^[:alpha:]]")   
+\end_layout
+
+\begin_layout Plain Layout
+
+	labor <- str_count(speechbody,"[^[:alpha:]][Ll]abor[^[:alpha:]]")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	list<-list(Body=speechbody,Title=speechtitle,Laugh=laughter,Appl=applause,Strip
+=stripout,
+\end_layout
+
+\begin_layout Plain Layout
+
+          Extractw=extractwords,Extracts=extractsentence,CW=countwords,
+ CS=countsentence,Averages=averagesentences, Averagew=averagewords,
+\end_layout
+
+\begin_layout Plain Layout
+
+		  A=I, B=we, C=america, Demo=democra, Repu=republic, Democra=democrat,
+ Republica=republican,                 
+\end_layout
+
+\begin_layout Plain Layout
+
+		  Fr=free, Wa=war, Go=god, Godbl=godbless, Jccc=jcc, IC=income, LB=labor)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    return(list)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Part (h)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## make a list of every information of the speech 
+\end_layout
+
+\begin_layout Plain Layout
+
+summary<-lapply(url,speechinfo)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## now we want to line up the years by orders so that this becomes x-axis
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+## first we get the vector of titles
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+titles<-sapply(1:length(url),function(x){summary[[x]]$Title})
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## then extract the years from the titles and order them 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+years<-str_extract(titles,"[[:digit:]]{4}") 
+\end_layout
+
+\begin_layout Plain Layout
+
+yearsindex<-order(years)
+\end_layout
+
+\begin_layout Plain Layout
+
+range<-(144:236) 
+\end_layout
+
+\begin_layout Plain Layout
+
+len<-length(range)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## then summarize the speeches again by order of years
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+speechsummary<-lapply(yearsindex,function(x){summary[[x]]}) 
+\end_layout
+
+\begin_layout Plain Layout
+
+speechsummary<-lapply(range,function(x){speechsummary[[x]]})
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Part(h) plotting
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Number of words
+\end_layout
+
+\begin_layout Plain Layout
+
+numberofwords<-sapply(1:len,function(x){speechsummary[[x]]$CW})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(numberofwords,type="b",main="Number of words change",font.main=1,xlab="years
+",ylab="counts")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(numberofwords, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Number of sentences
+\end_layout
+
+\begin_layout Plain Layout
+
+numberofsentences<-sapply(1:len,function(x){speechsummary[[x]]$CS})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(numberofsentences,type="b",main="Number of sentence change",font.main=1,xlab
+="years",ylab="counts")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(numberofsentences, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Average words length
+\end_layout
+
+\begin_layout Plain Layout
+
+averagewords<-sapply(1:len,function(x){speechsummary[[x]]$Averagew})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(averagewords,type="b",main="Average words length change",font.main=1,xlab="y
+ears",ylab="counts")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(averagewords, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Average sentence length
+\end_layout
+
+\begin_layout Plain Layout
+
+averagesentence<-sapply(1:len,function(x){speechsummary[[x]]$Averages})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(averagesentence,type="b",main="Average sentence length change",font.main=1,
+\end_layout
+
+\begin_layout Plain Layout
+
+xlab="years",ylab="counts")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(averagesentence, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Number of "war"
+\end_layout
+
+\begin_layout Plain Layout
+
+numberofwar<-sapply(1:len,function(x){speechsummary[[x]]$Wa})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(numberofwar,type="b",main="Number of war change",font.main=1,xlab="years",yl
+ab="counts")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(numberofwar, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Number of "free"
+\end_layout
+
+\begin_layout Plain Layout
+
+numberoffree<-sapply(1:len,function(x){speechsummary[[x]]$Fr})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(numberoffree,type="b",main="Number of free change",font.main=1,xlab="years",
+ylab="counts")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(numberoffree, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Part (h) Dem vs.
+ Rep
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## We are comparing the average figures of variables of democratics and
+ republican.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## First, we make a list of democratic speeches.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+democratics<-grep("Roosevelt|Truman|Kennedy|Johnson|Carter|Clinton|Obama",titles
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+lengthdemocratics<-length(democratics)
+\end_layout
+
+\begin_layout Plain Layout
+
+democraticspeech<-lapply(democratics,function(x){summary[[x]]})
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Then we calculate the mean of # of variables.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+word1<-mean(sapply(1:lengthdemocratics,function(x){democraticspeech[[x]]$CW}))
+\end_layout
+
+\begin_layout Plain Layout
+
+sentence1<-mean(sapply(1:lengthdemocratics,function(x){democraticspeech[[x]]$CS}
+))
+\end_layout
+
+\begin_layout Plain Layout
+
+avgword1<-mean(sapply(1:lengthdemocratics,function(x){democraticspeech[[x]]$Aver
+agew}))
+\end_layout
+
+\begin_layout Plain Layout
+
+avgsentence1<-mean(sapply(1:lengthdemocratics,function(x){democraticspeech[[x]]$
+Averages}))
+\end_layout
+
+\begin_layout Plain Layout
+
+war1<-mean(sapply(1:lengthdemocratics,function(x){democraticspeech[[x]]$Wa}))
+\end_layout
+
+\begin_layout Plain Layout
+
+free1<-mean(sapply(1:lengthdemocratics,function(x){democraticspeech[[x]]$Fr}))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## To make it easy to see, we make a vector consisted of the means we calculated
+ above.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+dem<-c(word1, sentence1, avgword1, avgsentence1, war1, free1) 
+\end_layout
+
+\begin_layout Plain Layout
+
+dem
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## We do the same thing for republican.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+republican<-grep("Eisenhower|Nixon|Ford|Reagan|George W.
+ Bush|George Bush",titles)
+\end_layout
+
+\begin_layout Plain Layout
+
+lengthrepublican<-length(republican)
+\end_layout
+
+\begin_layout Plain Layout
+
+republicanspeech<-lapply(republican,function(x){summary[[x]]}) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+word2<-mean(sapply(1:lengthrepublican,function(x){republicanspeech[[x]]$CW}))
+\end_layout
+
+\begin_layout Plain Layout
+
+sentence2<-mean(sapply(1:lengthrepublican,function(x){republicanspeech[[x]]$CS})
+)
+\end_layout
+
+\begin_layout Plain Layout
+
+avgword2<-mean(sapply(1:lengthrepublican,function(x){republicanspeech[[x]]$Avera
+gew}))
+\end_layout
+
+\begin_layout Plain Layout
+
+avgsentence2<-mean(sapply(1:lengthrepublican,function(x){republicanspeech[[x]]$A
+verages}))
+\end_layout
+
+\begin_layout Plain Layout
+
+war2<-mean(sapply(1:lengthrepublican,function(x){republicanspeech[[x]]$Wa}))
+\end_layout
+
+\begin_layout Plain Layout
+
+free2<-mean(sapply(1:lengthrepublican,function(x){republicanspeech[[x]]$Fr}))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+rep<-c(word2, sentence2, avgword2, avgsentence2, war2, free2)  
+\end_layout
+
+\begin_layout Plain Layout
+
+rep
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## When comparing the values, we use the ratio since the real value is too
+ huge.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+republican<-rep/(rep+dem)
+\end_layout
+
+\begin_layout Plain Layout
+
+republican
+\end_layout
+
+\begin_layout Plain Layout
+
+democratic<-dem/(rep+dem)
+\end_layout
+
+\begin_layout Plain Layout
+
+democratic
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Plot a graph: The two parties differed greatly in usage of "war".
+\end_layout
+
+\begin_layout Plain Layout
+
+## Democrats use the word more often.
+\end_layout
+
+\begin_layout Plain Layout
+
+## Also, it seems that democrats make longer speech with more sentences
+ and words.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+library(ggplot2) 
+\end_layout
+
+\begin_layout Plain Layout
+
+library(reshape2)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+compare<-c("word","sentence","avgword","avgsentence","war","free")
+\end_layout
+
+\begin_layout Plain Layout
+
+dataframe<-data.frame(compare,republican,democratic)
+\end_layout
+
+\begin_layout Plain Layout
+
+melt.var<-melt(dataframe,id=c("compare"))
+\end_layout
+
+\begin_layout Plain Layout
+
+ggplot(melt.var) + 
+\end_layout
+
+\begin_layout Plain Layout
+
+	geom_bar(aes(x=compare, y=value, fill=variable),
+\end_layout
+
+\begin_layout Plain Layout
+
+	stat="identity",position="dodge",width=0.7) +   
+\end_layout
+
+\begin_layout Plain Layout
+
+	scale_fill_manual("Resultnn", values = c("red","blue"),  
+\end_layout
+
+\begin_layout Plain Layout
+
+	labels = c(" Repub", " Democr"))  +   
+\end_layout
+
+\begin_layout Plain Layout
+
+	labs(x="nnVariables",y="Rationn")  +   
+\end_layout
+
+\begin_layout Plain Layout
+
+	theme_bw()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Part(i)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## I observed how the number of "income" and "labor" has changed over time.
+\end_layout
+
+\begin_layout Plain Layout
+
+## The counting function is included in the speechinfo function.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Number of "income": the word "income" was used especially a lot in 1970s.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+incomechange<-sapply(1:len,function(x){speechsummary[[x]]$IC})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(incomechange,type="b",main="Change of Income",font.main=1,xlab="year",ylab="
+# of Income")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(incomechange, cex = .3, col = "red")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## Number of "labor": the word "labor" was used especially a lot in 1950s
+ which is the post-war period and 1980s.
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+laborchange<-sapply(1:len,function(x){speechsummary[[x]]$LB})
+\end_layout
+
+\begin_layout Plain Layout
+
+plot(laborchange,type="b",main="Change of Labor",font.main=1,xlab="year",ylab="#
+ of Labor")
+\end_layout
+
+\begin_layout Plain Layout
+
+points(laborchange, cex = .3, col = "blue")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
