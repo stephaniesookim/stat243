@@ -1,0 +1,391 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/stat243-fall-2014/ps3//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat243}
+
+
+\title{Problem Set 3}
+
+
+\author{Stephanie Kim}
+
+\maketitle
+/raggedright
+
+
+\section*{Part (a)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(stringr)}
+\hlkwd{library}\hlstd{(XML)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Loading required package: methods}}\begin{alltt}
+\hlkwd{library}\hlstd{(bitops)}
+\hlkwd{library}\hlstd{(RCurl)}
+
+\hlcom{## get the source code of the URL}
+\hlstd{html}\hlkwb{<-}\hlkwd{getURL}\hlstd{(}\hlstr{"http://www.presidency.ucsb.edu/sou.php"}\hlstd{)}
+
+\hlcom{## this command gets rid of unnecessary spaces }
+\hlstd{clean}\hlkwb{<-}\hlkwd{htmlParse}\hlstd{(html)}
+
+\hlcom{## grep the parts that starts with <td and ends with a> and that the class is doclist}
+\hlstd{vector}\hlkwb{<-}\hlkwd{xpathSApply}\hlstd{(clean,}\hlstr{"//td[@class='doclist']//a"}\hlstd{)}
+
+\hlcom{## grep the parts that come after href }
+\hlstd{url}\hlkwb{<-}\hlkwd{sapply}\hlstd{(vector, xmlGetAttr,}\hlstr{"href"}\hlstd{)}
+
+\hlcom{## get rid of duplicate elements }
+\hlstd{url}\hlkwb{<-}\hlkwd{unique}\hlstd{(url)}
+
+\hlcom{## get rid of the first element since the it is not a url }
+\hlstd{url}\hlkwb{<-}\hlstd{url[}\hlnum{2}\hlopt{:}\hlkwd{length}\hlstd{(url)]}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(b)\textasciitilde{}(f)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{speechinfo}\hlkwb{<-}\hlkwa{function}\hlstd{(}\hlkwc{u}\hlstd{)\{}
+
+\hlcom{## (b)}
+\hlcom{## returns the body and title of the speech}
+
+        \hlstd{htmlspeech}\hlkwb{<-}\hlkwd{getURL}\hlstd{(u)}
+        \hlstd{cleanspeech}\hlkwb{<-}\hlkwd{htmlParse}\hlstd{(}\hlkwd{str_replace_all}\hlstd{(htmlspeech,}\hlstr{"<p>"}\hlstd{,} \hlstr{"\textbackslash{}n\textbackslash{}n"}\hlstd{))}
+        \hlstd{speechbody}\hlkwb{<-}\hlkwd{xpathSApply}\hlstd{(cleanspeech,}\hlstr{"//span[@class='displaytext']"}\hlstd{,xmlValue)}
+        \hlstd{speechtitle}\hlkwb{<-}\hlkwd{xpathSApply}\hlstd{(cleanspeech,} \hlstr{"//meta[@name='title']"}\hlstd{)}
+        \hlstd{speechtitle}\hlkwb{<-}\hlkwd{sapply}\hlstd{(speechtitle,xmlGetAttr,}\hlstr{"content"}\hlstd{)}
+
+\hlcom{## (c) }
+\hlcom{## this function returns the count of laughter and applause}
+\hlcom{## it also returns the body of the speech with laughter and applause eliminated}
+
+        \hlstd{laughter} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Laughter\textbackslash{}\textbackslash{}]"}\hlstd{))}
+        \hlstd{applause} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Applause\textbackslash{}\textbackslash{}]"}\hlstd{))}
+        \hlstd{stripout} \hlkwb{<-} \hlkwd{str_replace_all}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Laughter\textbackslash{}\textbackslash{}][[:space:]]"}\hlstd{),}\hlstr{"\textbackslash{}\textbackslash{}1"}\hlstd{)}
+        \hlstd{stripout} \hlkwb{<-} \hlkwd{str_replace_all}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"\textbackslash{}\textbackslash{}[Applause\textbackslash{}\textbackslash{}][[:space:]]"}\hlstd{),}\hlstr{"\textbackslash{}\textbackslash{}1"}\hlstd{)}
+
+\hlcom{## (d) }
+\hlcom{## this function returns a vector of which each element is the words of the speech}
+\hlcom{## it also returns the number of words}
+
+        \hlstd{extractwords} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{" "}\hlstd{))}
+        \hlstd{countwords} \hlkwb{<-} \hlkwd{length}\hlstd{(extractwords)}
+
+\hlcom{## (e) }
+\hlcom{## this function returns a vector of which each element is the sentences of the speech}
+    \hlstd{extractsentence} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{"\textbackslash{}\textbackslash{}."}\hlstd{))}
+
+\hlcom{## (f) i,ii}
+\hlcom{## this function returns the number of words and sentences}
+\hlcom{## it also returns the average length of sentences and words}
+
+        \hlstd{extractwords} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{" "}\hlstd{))}
+        \hlstd{extractsentence} \hlkwb{<-} \hlkwd{unlist}\hlstd{(}\hlkwd{strsplit}\hlstd{(speechbody,}\hlstr{"\textbackslash{}\textbackslash{}."}\hlstd{))}
+        \hlstd{countwords} \hlkwb{<-} \hlkwd{length}\hlstd{(extractwords)}
+        \hlstd{countsentence} \hlkwb{<-} \hlkwd{length}\hlstd{(extractsentence)}
+        \hlstd{averagesentences} \hlkwb{<-} \hlstd{countwords}\hlopt{/}\hlstd{countsentence}
+        \hlstd{averagewords} \hlkwb{<-} \hlkwd{sum}\hlstd{(}\hlkwd{nchar}\hlstd{(extractwords))}\hlopt{/}\hlstd{countwords}
+
+\hlcom{## (f) iii}
+\hlcom{## this function returns the number of the word stems we are looking for}
+
+        \hlstd{I} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlkwd{ignore.case}\hlstd{(}\hlstr{"[^[:alpha:]]I[^[:alpha:]]"}\hlstd{))}
+        \hlstd{we} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ww]e[^[:alpha:]]"}\hlstd{)}
+        \hlstd{america} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Aa]merica[n]?[s]?[^[:alpha:]]"}\hlstd{)}
+        \hlstd{democra} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Dd]emocracy[^[:alpha:]]|[^[:alpha:]][Dd]emocratic[^[:alpha:]]"}\hlstd{)}
+        \hlstd{republic} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Rr]epublic[^[:alpha:]]"}\hlstd{)}
+        \hlstd{democrat} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Dd]emocrat[s]?[^[:alpha:]]|[^[:alpha:]][Dd]emocratic[^[:alpha:]]"}\hlstd{)}
+        \hlstd{republican} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Rr]epublican[s]?[^[:alpha:]]"}\hlstd{)}
+        \hlstd{free} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ff]ree[^[:alpha:]]|[^[:alpha:]][Ff]reedom[^[:alpha:]]"}\hlstd{)}
+        \hlstd{war} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ww]ar?[^[:alpha:]]"}\hlstd{)}
+        \hlstd{god} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Gg]od[^[:alpha:]][^bless]"}\hlstd{)}
+        \hlstd{godbless} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Gg]od[^[:alpha:]]bless"}\hlstd{)}
+        \hlstd{jcc} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]]Jesus[^[:alpha:]]|[^[:alpha:]]Christ[^[:alpha:]]|[^[:alpha:]]Christian[^[:alpha:]]"}\hlstd{)}
+        \hlstd{income} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ii]ncome[^[:alpha:]]"}\hlstd{)}
+        \hlstd{labor} \hlkwb{<-} \hlkwd{str_count}\hlstd{(speechbody,}\hlstr{"[^[:alpha:]][Ll]abor[^[:alpha:]]"}\hlstd{)}
+
+
+        \hlstd{list}\hlkwb{<-}\hlkwd{list}\hlstd{(}\hlkwc{Body}\hlstd{=speechbody,}\hlkwc{Title}\hlstd{=speechtitle,}\hlkwc{Laugh}\hlstd{=laughter,}\hlkwc{Appl}\hlstd{=applause,}\hlkwc{Strip}\hlstd{=stripout,}
+          \hlkwc{Extractw}\hlstd{=extractwords,}\hlkwc{Extracts}\hlstd{=extractsentence,}\hlkwc{CW}\hlstd{=countwords,} \hlkwc{CS}\hlstd{=countsentence,}\hlkwc{Averages}\hlstd{=averagesentences,} \hlkwc{Averagew}\hlstd{=averagewords,}
+                  \hlkwc{A}\hlstd{=I,} \hlkwc{B}\hlstd{=we,} \hlkwc{C}\hlstd{=america,} \hlkwc{Demo}\hlstd{=democra,} \hlkwc{Repu}\hlstd{=republic,} \hlkwc{Democra}\hlstd{=democrat,} \hlkwc{Republica}\hlstd{=republican,}
+                  \hlkwc{Fr}\hlstd{=free,} \hlkwc{Wa}\hlstd{=war,} \hlkwc{Go}\hlstd{=god,} \hlkwc{Godbl}\hlstd{=godbless,} \hlkwc{Jccc}\hlstd{=jcc,} \hlkwc{IC}\hlstd{=income,} \hlkwc{LB}\hlstd{=labor)}
+
+    \hlkwd{return}\hlstd{(list)}
+
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part (h)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## make a list of every information of the speech }
+\hlstd{summary}\hlkwb{<-}\hlkwd{lapply}\hlstd{(url,speechinfo)}
+
+\hlcom{## now we want to line up the years by orders so that this becomes x-axis }
+\hlcom{## first we get the vector of titles}
+
+\hlstd{titles}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(url),}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{summary[[x]]}\hlopt{$}\hlstd{Title\})}
+
+\hlcom{## then extract the years from the titles and order them }
+
+\hlstd{years}\hlkwb{<-}\hlkwd{str_extract}\hlstd{(titles,}\hlstr{"[[:digit:]]\{4\}"}\hlstd{)}
+\hlstd{yearsindex}\hlkwb{<-}\hlkwd{order}\hlstd{(years)}
+\hlstd{range}\hlkwb{<-}\hlstd{(}\hlnum{144}\hlopt{:}\hlnum{236}\hlstd{)}
+\hlstd{len}\hlkwb{<-}\hlkwd{length}\hlstd{(range)}
+
+\hlcom{## then summarize the speeches again by order of years}
+
+\hlstd{speechsummary}\hlkwb{<-}\hlkwd{lapply}\hlstd{(yearsindex,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{summary[[x]]\})}
+\hlstd{speechsummary}\hlkwb{<-}\hlkwd{lapply}\hlstd{(range,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]\})}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Part(h) plotting}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## Number of words}
+\hlstd{numberofwords}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{CW\})}
+\hlkwd{plot}\hlstd{(numberofwords,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Number of words change"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"years"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"counts"}\hlstd{)}
+\hlkwd{points}\hlstd{(numberofwords,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-41} 
+\begin{kframe}\begin{alltt}
+\hlcom{## Number of sentences}
+\hlstd{numberofsentences}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{CS\})}
+\hlkwd{plot}\hlstd{(numberofsentences,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Number of sentence change"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"years"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"counts"}\hlstd{)}
+\hlkwd{points}\hlstd{(numberofsentences,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-42} 
+\begin{kframe}\begin{alltt}
+\hlcom{## Average words length}
+\hlstd{averagewords}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{Averagew\})}
+\hlkwd{plot}\hlstd{(averagewords,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Average words length change"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"years"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"counts"}\hlstd{)}
+\hlkwd{points}\hlstd{(averagewords,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-43} 
+\begin{kframe}\begin{alltt}
+\hlcom{## Average sentence length}
+\hlstd{averagesentence}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{Averages\})}
+\hlkwd{plot}\hlstd{(averagesentence,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Average sentence length change"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}
+\hlkwc{xlab}\hlstd{=}\hlstr{"years"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"counts"}\hlstd{)}
+\hlkwd{points}\hlstd{(averagesentence,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-44} 
+\begin{kframe}\begin{alltt}
+\hlcom{## Number of "war"}
+\hlstd{numberofwar}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{Wa\})}
+\hlkwd{plot}\hlstd{(numberofwar,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Number of war change"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"years"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"counts"}\hlstd{)}
+\hlkwd{points}\hlstd{(numberofwar,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-45} 
+\begin{kframe}\begin{alltt}
+\hlcom{## Number of "free"}
+\hlstd{numberoffree}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{Fr\})}
+\hlkwd{plot}\hlstd{(numberoffree,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Number of free change"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"years"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"counts"}\hlstd{)}
+\hlkwd{points}\hlstd{(numberoffree,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-46} 
+
+\end{knitrout}
+
+
+\section*{Part (h) Dem vs. Rep}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## We are comparing the average figures of variables of democratics and republican.}
+
+\hlcom{## First, we make a list of democratic speeches.}
+
+\hlstd{democratics}\hlkwb{<-}\hlkwd{grep}\hlstd{(}\hlstr{"Roosevelt|Truman|Kennedy|Johnson|Carter|Clinton|Obama"}\hlstd{,titles)}
+\hlstd{lengthdemocratics}\hlkwb{<-}\hlkwd{length}\hlstd{(democratics)}
+\hlstd{democraticspeech}\hlkwb{<-}\hlkwd{lapply}\hlstd{(democratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{summary[[x]]\})}
+
+\hlcom{## Then we calculate the mean of # of variables.}
+
+\hlstd{word1}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthdemocratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{democraticspeech[[x]]}\hlopt{$}\hlstd{CW\}))}
+\hlstd{sentence1}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthdemocratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{democraticspeech[[x]]}\hlopt{$}\hlstd{CS\}))}
+\hlstd{avgword1}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthdemocratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{democraticspeech[[x]]}\hlopt{$}\hlstd{Averagew\}))}
+\hlstd{avgsentence1}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthdemocratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{democraticspeech[[x]]}\hlopt{$}\hlstd{Averages\}))}
+\hlstd{war1}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthdemocratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{democraticspeech[[x]]}\hlopt{$}\hlstd{Wa\}))}
+\hlstd{free1}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthdemocratics,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{democraticspeech[[x]]}\hlopt{$}\hlstd{Fr\}))}
+
+\hlcom{## To make it easy to see, we make a vector consisted of the means we calculated above.}
+
+\hlstd{dem}\hlkwb{<-}\hlkwd{c}\hlstd{(word1, sentence1, avgword1, avgsentence1, war1, free1)}
+\hlstd{dem}
+\end{alltt}
+\begin{verbatim}
+## [1] 9045.000  395.127    4.977   22.645   17.270   10.841
+\end{verbatim}
+\begin{alltt}
+\hlcom{## We do the same thing for republican.}
+
+\hlstd{republican}\hlkwb{<-}\hlkwd{grep}\hlstd{(}\hlstr{"Eisenhower|Nixon|Ford|Reagan|George W. Bush|George Bush"}\hlstd{,titles)}
+\hlstd{lengthrepublican}\hlkwb{<-}\hlkwd{length}\hlstd{(republican)}
+\hlstd{republicanspeech}\hlkwb{<-}\hlkwd{lapply}\hlstd{(republican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{summary[[x]]\})}
+
+\hlstd{word2}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthrepublican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{republicanspeech[[x]]}\hlopt{$}\hlstd{CW\}))}
+\hlstd{sentence2}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthrepublican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{republicanspeech[[x]]}\hlopt{$}\hlstd{CS\}))}
+\hlstd{avgword2}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthrepublican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{republicanspeech[[x]]}\hlopt{$}\hlstd{Averagew\}))}
+\hlstd{avgsentence2}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthrepublican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{republicanspeech[[x]]}\hlopt{$}\hlstd{Averages\}))}
+\hlstd{war2}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthrepublican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{republicanspeech[[x]]}\hlopt{$}\hlstd{Wa\}))}
+\hlstd{free2}\hlkwb{<-}\hlkwd{mean}\hlstd{(}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{lengthrepublican,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{republicanspeech[[x]]}\hlopt{$}\hlstd{Fr\}))}
+
+\hlstd{rep}\hlkwb{<-}\hlkwd{c}\hlstd{(word2, sentence2, avgword2, avgsentence2, war2, free2)}
+\hlstd{rep}
+\end{alltt}
+\begin{verbatim}
+## [1] 5533.512  276.439    5.010   19.936    5.683   16.000
+\end{verbatim}
+\begin{alltt}
+\hlcom{## When comparing the values, we use the ratio since the real value is too huge.}
+
+\hlstd{republican}\hlkwb{<-}\hlstd{rep}\hlopt{/}\hlstd{(rep}\hlopt{+}\hlstd{dem)}
+\hlstd{republican}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.3796 0.4116 0.5017 0.4682 0.2476 0.5961
+\end{verbatim}
+\begin{alltt}
+\hlstd{democratic}\hlkwb{<-}\hlstd{dem}\hlopt{/}\hlstd{(rep}\hlopt{+}\hlstd{dem)}
+\hlstd{democratic}
+\end{alltt}
+\begin{verbatim}
+## [1] 0.6204 0.5884 0.4983 0.5318 0.7524 0.4039
+\end{verbatim}
+\begin{alltt}
+\hlcom{## Plot a graph: The two parties differed greatly in usage of "war".}
+\hlcom{## Democrats use the word more often.}
+\hlcom{## Also, it seems that democrats make longer speech with more sentences and words.}
+
+\hlkwd{library}\hlstd{(ggplot2)}
+\hlkwd{library}\hlstd{(reshape2)}
+
+\hlstd{compare}\hlkwb{<-}\hlkwd{c}\hlstd{(}\hlstr{"word"}\hlstd{,}\hlstr{"sentence"}\hlstd{,}\hlstr{"avgword"}\hlstd{,}\hlstr{"avgsentence"}\hlstd{,}\hlstr{"war"}\hlstd{,}\hlstr{"free"}\hlstd{)}
+\hlstd{dataframe}\hlkwb{<-}\hlkwd{data.frame}\hlstd{(compare,republican,democratic)}
+\hlstd{melt.var}\hlkwb{<-}\hlkwd{melt}\hlstd{(dataframe,}\hlkwc{id}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{"compare"}\hlstd{))}
+\hlkwd{ggplot}\hlstd{(melt.var)} \hlopt{+}
+        \hlkwd{geom_bar}\hlstd{(}\hlkwd{aes}\hlstd{(}\hlkwc{x}\hlstd{=compare,} \hlkwc{y}\hlstd{=value,} \hlkwc{fill}\hlstd{=variable),}
+        \hlkwc{stat}\hlstd{=}\hlstr{"identity"}\hlstd{,}\hlkwc{position}\hlstd{=}\hlstr{"dodge"}\hlstd{,}\hlkwc{width}\hlstd{=}\hlnum{0.7}\hlstd{)} \hlopt{+}
+        \hlkwd{theme_bw}\hlstd{()}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-5} 
+
+\end{knitrout}
+
+
+\section*{Part(i)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## I observed how the number of "income" and "labor" has changed over time.}
+\hlcom{## The counting function is included in the speechinfo function.}
+
+\hlcom{## Number of "income": the word "income" was used especially a lot in 1970s.}
+
+\hlstd{incomechange}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{IC\})}
+\hlkwd{plot}\hlstd{(incomechange,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Change of Income"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"year"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"# of Income"}\hlstd{)}
+\hlkwd{points}\hlstd{(incomechange,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"red"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-61} 
+\begin{kframe}\begin{alltt}
+\hlcom{## Number of "labor": the word "labor" was used especially a lot in 1950s which is the post-war period and 1980s.}
+
+\hlstd{laborchange}\hlkwb{<-}\hlkwd{sapply}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{len,}\hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{speechsummary[[x]]}\hlopt{$}\hlstd{LB\})}
+\hlkwd{plot}\hlstd{(laborchange,}\hlkwc{type}\hlstd{=}\hlstr{"b"}\hlstd{,}\hlkwc{main}\hlstd{=}\hlstr{"Change of Labor"}\hlstd{,}\hlkwc{font.main}\hlstd{=}\hlnum{1}\hlstd{,}\hlkwc{xlab}\hlstd{=}\hlstr{"year"}\hlstd{,}\hlkwc{ylab}\hlstd{=}\hlstr{"# of Labor"}\hlstd{)}
+\hlkwd{points}\hlstd{(laborchange,} \hlkwc{cex} \hlstd{=} \hlnum{.3}\hlstd{,} \hlkwc{col} \hlstd{=} \hlstr{"blue"}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-62} 
+
+\end{knitrout}
+\end{document}
