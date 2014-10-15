@@ -1,0 +1,714 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/ps4//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat 243}
+
+
+\title{Problem Set 4}
+
+
+\author{Stephanie Kim}
+
+
+\author{github : stephaniesookim}
+
+\maketitle
+/raggedright
+
+
+\section*{Number 1}
+
+Since the result we are trying to return is x+y (5th line), we get
+the value of x first. Also, we can observe that the value of y is
+defined inside the declaration of x as 1. So in this case, x+y = 2
++ 1 = 3.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{f1} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{=\{y} \hlkwb{<-} \hlnum{1}
+                                  \hlnum{2}\hlstd{\}}
+                           \hlstd{,} \hlkwc{y}\hlstd{=}\hlnum{0}\hlstd{) \{}
+  \hlstd{x}\hlopt{+}\hlstd{y}
+\hlstd{\}}
+
+
+\hlkwd{f1}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] 3
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+On the other hand in the below case, since the result we are trying
+to return is y+x, we get the value of y first. So in this case, y+x
+= 0 + 2 = 2
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{f2} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{=\{y} \hlkwb{<-} \hlnum{1}
+                                  \hlnum{2}\hlstd{\}}
+                           \hlstd{,} \hlkwc{y}\hlstd{=}\hlnum{0}\hlstd{) \{}
+  \hlstd{y}\hlopt{+}\hlstd{x}
+\hlstd{\}}
+
+
+\hlkwd{f2}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## [1] 2
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 2}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(rbenchmark)}
+
+
+\hlcom{# plotfun is a function that plots the elapsed time of subsetting method}
+\hlcom{# by vector of indices and vector of logical values}
+\hlcom{# by observing the plot, we can see which method takes shorter time}
+
+\hlstd{plotfun} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{n}\hlstd{) \{}
+
+        \hlstd{x} \hlkwb{<-} \hlstd{indicestime} \hlkwb{<-} \hlstd{booleanstime} \hlkwb{<-} \hlkwd{time}\hlstd{(}\hlkwd{as.numeric}\hlstd{(}\hlnum{NA}\hlstd{), n)}
+
+        \hlcom{# run a for loop for 1,2,..,n}
+        \hlcom{# we set the length of vector be 10^i}
+        \hlcom{# indices is a function that subsets a vector based on vector of indices}
+        \hlcom{# booleans is a function that subsets a vector based on vector of logical values (booleans)}
+        \hlcom{# indicestime[i] is the elapsed time of the 1st method}
+        \hlcom{# booleanstime[i] is the elapsed time of the 2nd method}
+
+        \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
+                \hlstd{x[i]} \hlkwb{<-} \hlstd{y} \hlkwb{<-} \hlnum{10}\hlopt{^}\hlstd{i}
+
+        \hlstd{indices} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{y}\hlstd{) \{}
+        \hlstd{ind} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{y)}
+        \hlstd{ind[}\hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlkwd{floor}\hlstd{(y}\hlopt{^}\hlnum{1}\hlopt{/}\hlnum{2}\hlstd{))]}
+        \hlstd{\}}
+
+                \hlstd{booleans} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{y}\hlstd{) \{}
+                  \hlstd{bool} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlopt{:}\hlstd{y)}
+                  \hlkwd{subset}\hlstd{(bool, bool} \hlopt{<=} \hlkwd{floor}\hlstd{(y}\hlopt{^}\hlnum{1}\hlopt{/}\hlnum{2}\hlstd{))}
+        \hlstd{\}}
+
+                \hlstd{time} \hlkwb{<-} \hlkwd{benchmark}\hlstd{(}\hlkwd{indices}\hlstd{(y),} \hlkwd{booleans}\hlstd{(y),} \hlkwc{replications} \hlstd{=} \hlnum{10}\hlstd{,}
+                                                        \hlkwc{columns}\hlstd{=}\hlkwd{c}\hlstd{(}\hlstr{'test'}\hlstd{,} \hlstr{'elapsed'}\hlstd{,} \hlstr{'replications'}\hlstd{))}
+
+        \hlstd{indicestime[i]} \hlkwb{<-} \hlstd{time[}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{]}
+        \hlstd{booleanstime[i]} \hlkwb{<-} \hlstd{time[}\hlnum{2}\hlstd{,}\hlnum{2}\hlstd{]}
+        \hlstd{\}}
+
+        \hlcom{# we plot elapsed time changing over the length of a vector for each method}
+        \hlkwd{plot}\hlstd{(booleanstime,}  \hlkwc{type}\hlstd{=}\hlstr{"o"}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{"red"}\hlstd{,} \hlkwc{xlab}\hlstd{=}\hlstr{"length of the vector"}\hlstd{,}
+                \hlkwc{ylab}\hlstd{=}\hlstr{"time"}\hlstd{,} \hlkwc{xaxt}\hlstd{=}\hlstr{'n'}\hlstd{)}
+        \hlkwd{points}\hlstd{(indicestime,}  \hlkwc{type}\hlstd{=}\hlstr{"o"}\hlstd{,} \hlkwc{col}\hlstd{=}\hlstr{"blue"}\hlstd{)}
+        \hlkwd{axis}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwc{at}\hlstd{=}\hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(x),} \hlkwc{labels}\hlstd{=x)}
+
+        \hlcom{# then we return the plots}
+        \hlkwd{return}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{t1}\hlstd{=booleanstime,} \hlkwc{t2}\hlstd{=indicestime))}
+\hlstd{\}}
+
+\hlcom{# let's print out the plot when n=5}
+\hlkwd{plotfun}\hlstd{(}\hlnum{5}\hlstd{)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-3} 
+\begin{kframe}\begin{verbatim}
+## $t1
+## [1] 0.000 0.001 0.000 0.003 0.034
+## attr(,"tsp")
+## [1] 1 1 1
+## 
+## $t2
+## [1] 0.000 0.000 0.001 0.011 0.142
+## attr(,"tsp")
+## [1] 1 1 1
+\end{verbatim}
+\begin{alltt}
+\hlcom{# from the plot, we can see that subsetting by indices is more efficient than subsetting by booleans}
+\hlcom{# this is because the 1st method only goes through 1,2,..,floor(y^1/2) elements}
+\hlcom{# while the 2nd method goes through the whole vector}
+\hlcom{# the gap will be greater as the length of a vector gets longer}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 3 (a)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# we use .Internal(inspect(dat)); gc()}
+\hlcom{# to inspect into the structure of the data frame}
+\hlcom{# and where in memory different parts of the data frame are stored}
+\hlcom{# let's compare how it changes before and after we change one element}
+
+\hlstd{dat} \hlkwb{<-} \hlkwd{read.csv}\hlstd{(}\hlstr{"cpds.csv"}\hlstd{,} \hlkwc{head} \hlstd{=} \hlnum{TRUE}\hlstd{,} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{)}
+\hlkwd{.Internal}\hlstd{(}\hlkwd{inspect}\hlstd{(dat));} \hlkwd{gc}\hlstd{()}
+
+\hlstd{datcopy[}\hlnum{1}\hlstd{,}\hlnum{1}\hlstd{]} \hlkwb{<-} \hlnum{2000}
+\hlkwd{.Internal}\hlstd{(}\hlkwd{inspect}\hlstd{(datcopy));} \hlkwd{gc}\hlstd{()}
+
+\hlcom{# the entire data frame is not copied}
+\hlcom{# the element is simply replaced without the entire column being copied}
+\hlcom{# the memory address of the changed column change with others unchanged}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 3 (b)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlstd{v1} \hlkwb{<-} \hlnum{1}\hlopt{:}\hlnum{10}
+\hlstd{v2} \hlkwb{<-} \hlnum{1}\hlopt{:}\hlnum{10}
+\hlstd{v3} \hlkwb{<-} \hlnum{1}\hlopt{:}\hlnum{10}
+
+\hlstd{vlist} \hlkwb{<-} \hlkwd{list}\hlstd{(v1, v2, v3)}
+\hlkwd{.Internal}\hlstd{(}\hlkwd{inspect}\hlstd{(vlist));} \hlkwd{gc}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## @7fde0af626d0 19 VECSXP g0c3 [NAM(2)] (len=3, tl=0)
+##   @7fde0c1e7cf0 13 INTSXP g0c4 [NAM(2)] (len=10, tl=0) 1,2,3,4,5,...
+##   @7fde0c1c46e0 13 INTSXP g0c4 [NAM(2)] (len=10, tl=0) 1,2,3,4,5,...
+##   @7fde0b98ce88 13 INTSXP g0c4 [NAM(2)] (len=10, tl=0) 1,2,3,4,5,...
+##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 160557  8.6     350000 18.7   350000 18.7
+## Vcells 362061  2.8    1031040  7.9  1031040  7.9
+\end{verbatim}
+\begin{alltt}
+\hlstd{vlist[[}\hlnum{1}\hlstd{]][}\hlnum{1}\hlstd{]} \hlkwb{<-} \hlnum{10}
+\hlkwd{.Internal}\hlstd{(}\hlkwd{inspect}\hlstd{(vlist));} \hlkwd{gc}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+## @7fde0af62568 19 VECSXP g0c3 [NAM(1)] (len=3, tl=0)
+##   @7fde0af25ca8 14 REALSXP g0c5 [] (len=10, tl=0) 10,2,3,4,5,...
+##   @7fde0c1c46e0 13 INTSXP g1c4 [MARK,NAM(2)] (len=10, tl=0) 1,2,3,4,5,...
+##   @7fde0b98ce88 13 INTSXP g1c4 [MARK,NAM(2)] (len=10, tl=0) 1,2,3,4,5,...
+##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 160583  8.6     350000 18.7   350000 18.7
+## Vcells 362143  2.8    1031040  7.9  1031040  7.9
+\end{verbatim}
+\begin{alltt}
+\hlcom{# the entire list is not copied}
+\hlcom{# the element is simply replaced without the entire list being copied}
+\hlcom{# the memory address of the changed vector (v1) change with others unchanged}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 4 (a), (c)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# randomwalk is a function that shows the (x,y) coordinate of n random walk}
+\hlcom{# it will print the whole path only when Full=T}
+
+\hlstd{randomwalk} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{n}\hlstd{,} \hlkwc{Full} \hlstd{= F)\{}
+
+    \hlcom{#for no step   }
+        \hlkwa{if} \hlstd{(n}\hlopt{==}\hlnum{0}\hlstd{)\{}
+        \hlkwd{paste0}\hlstd{(}\hlstr{"no step: (0,0)"}\hlstd{)}
+        \hlstd{\}}
+
+        \hlcom{#for negative input}
+        \hlkwa{else if} \hlstd{(n}\hlopt{<}\hlnum{0}\hlstd{)\{}
+        \hlkwd{paste0}\hlstd{(}\hlstr{"invalid (negative) input argument"}\hlstd{)}
+        \hlstd{\}}
+
+        \hlkwa{else}\hlstd{\{}
+
+        \hlcom{#cast as integer if n is not integer}
+        \hlstd{n} \hlkwb{=} \hlkwd{as.integer}\hlstd{(n)}
+
+        \hlcom{# gostop = vector of T/F      }
+        \hlcom{# randomly generate n-1 number for 0 to 1 (uniform) if greater than 0.5 True or False     }
+        \hlstd{gostop} \hlkwb{=} \hlkwd{runif}\hlstd{(n,} \hlkwc{min} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{max} \hlstd{=} \hlnum{1}\hlstd{)} \hlopt{>} \hlnum{0.5}
+
+        \hlcom{# dir = vector of 1/-1     }
+        \hlcom{# T = 1, F = 0, multiply by 2 - 1 become 1 and -1     }
+        \hlstd{dir} \hlkwb{=} \hlnum{2}\hlopt{*}\hlstd{(}\hlkwd{runif}\hlstd{(n,} \hlkwc{min} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{max} \hlstd{=} \hlnum{1}\hlstd{)} \hlopt{>} \hlnum{0.5}\hlstd{)}\hlopt{-}\hlnum{1}
+
+        \hlcom{# ifelse (gostop,dir,0)     }
+        \hlcom{# for every nth element of list gostop of T/F}
+        \hlcom{# if T => nth element of dir }
+        \hlcom{# if F => nth element of 0       }
+        \hlcom{# cumsum = cumulative sum     }
+        \hlstd{x} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlkwd{cumsum}\hlstd{(}\hlkwd{ifelse}\hlstd{(gostop,dir,}\hlnum{0}\hlstd{)))}
+        \hlstd{y} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlkwd{cumsum}\hlstd{(}\hlkwd{ifelse}\hlstd{(gostop,}\hlnum{0}\hlstd{, dir)))}
+
+        \hlcom{#print Full     }
+        \hlkwa{if} \hlstd{(Full} \hlopt{==} \hlnum{TRUE}\hlstd{) \{}
+                \hlstd{printx} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{,}\hlkwc{n}\hlstd{) \{}
+                        \hlstd{char} \hlkwb{=} \hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{"(x,y) coordinate : ("}\hlstd{, x[n]))}
+                \hlstd{\}}
+                \hlstd{printy} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{y}\hlstd{,}\hlkwc{n}\hlstd{) \{}
+                        \hlstd{char} \hlkwb{=} \hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{","}\hlstd{, y[n],} \hlstr{")"}\hlstd{))}
+                \hlstd{\}}
+                \hlstd{pathx} \hlkwb{<-} \hlkwd{sapply}\hlstd{(x,printx)}
+                \hlstd{pathy} \hlkwb{<-} \hlkwd{sapply}\hlstd{(y,printy)}
+                \hlkwd{print}\hlstd{(}\hlkwd{paste0}\hlstd{(pathx, pathy))}
+                \hlstd{\}}
+
+        \hlcom{#print result     }
+        \hlkwa{else if} \hlstd{(Full} \hlopt{==} \hlnum{FALSE}\hlstd{) \{}
+                \hlstd{char} \hlkwb{=} \hlstd{(}\hlkwd{paste0}\hlstd{(}\hlstr{"(x,y) coordinate : ("}\hlstd{, x[n}\hlopt{+}\hlnum{1}\hlstd{],} \hlstr{","}\hlstd{, y[n}\hlopt{+}\hlnum{1}\hlstd{],} \hlstr{")"}\hlstd{))}
+                \hlkwd{print}\hlstd{(char)}
+                \hlstd{\}}
+        \hlstd{\}}
+\hlstd{\}}
+
+\hlcom{#some examples}
+\hlkwd{randomwalk}\hlstd{(}\hlnum{0}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "no step: (0,0)"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{randomwalk}\hlstd{(}\hlopt{-}\hlnum{3.9}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "invalid (negative) input argument"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{randomwalk}\hlstd{(}\hlnum{1}\hlstd{,}\hlkwc{Full}\hlstd{=T)}
+\end{alltt}
+\begin{verbatim}
+## [1] "(x,y) coordinate : (0,0)"  "(x,y) coordinate : (0,-1)"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{randomwalk}\hlstd{(}\hlnum{1}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "(x,y) coordinate : (0,1)"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{randomwalk}\hlstd{(}\hlnum{4.9}\hlstd{,} \hlkwc{Full}\hlstd{=T)}
+\end{alltt}
+\begin{verbatim}
+## [1] "(x,y) coordinate : (0,0)"  "(x,y) coordinate : (0,1)" 
+## [3] "(x,y) coordinate : (0,0)"  "(x,y) coordinate : (0,-1)"
+## [5] "(x,y) coordinate : (1,-1)"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{randomwalk}\hlstd{(}\hlnum{5}\hlstd{,}\hlkwc{Full}\hlstd{=T)}
+\end{alltt}
+\begin{verbatim}
+## [1] "(x,y) coordinate : (0,0)"  "(x,y) coordinate : (0,-1)"
+## [3] "(x,y) coordinate : (1,-1)" "(x,y) coordinate : (1,0)" 
+## [5] "(x,y) coordinate : (0,0)"  "(x,y) coordinate : (0,-1)"
+\end{verbatim}
+\begin{alltt}
+\hlkwd{randomwalk}\hlstd{(}\hlnum{5}\hlstd{)}
+\end{alltt}
+\begin{verbatim}
+## [1] "(x,y) coordinate : (4,1)"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 4 (b)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{## formal s4 class OOP}
+\hlkwd{library}\hlstd{(methods)}
+\hlkwd{setClass}\hlstd{(}\hlstr{"rw"}\hlstd{,}\hlkwd{representation}\hlstd{(}\hlkwc{x} \hlstd{=} \hlstr{"vector"}\hlstd{,} \hlkwc{y} \hlstd{=} \hlstr{"vector"}\hlstd{,} \hlkwc{n} \hlstd{=} \hlstr{"numeric"}\hlstd{))}
+
+\hlcom{# constructor}
+\hlcom{# this is function that generates the class, rw}
+\hlstd{random} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{,} \hlkwc{y}\hlstd{,} \hlkwc{n}\hlstd{) \{}
+  \hlstd{n} \hlkwb{=} \hlkwd{as.integer}\hlstd{(n)}
+  \hlstd{gostop} \hlkwb{=} \hlkwd{runif}\hlstd{(n,} \hlkwc{min} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{max} \hlstd{=} \hlnum{1}\hlstd{)} \hlopt{>} \hlnum{0.5}
+  \hlstd{dir} \hlkwb{=} \hlnum{2}\hlopt{*}\hlstd{(}\hlkwd{runif}\hlstd{(n,} \hlkwc{min} \hlstd{=} \hlnum{0}\hlstd{,} \hlkwc{max} \hlstd{=} \hlnum{1}\hlstd{)} \hlopt{>} \hlnum{0.5}\hlstd{)} \hlopt{-} \hlnum{1}
+  \hlstd{x} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlkwd{cumsum}\hlstd{(}\hlkwd{ifelse}\hlstd{(gostop,dir,}\hlnum{0}\hlstd{)))}
+  \hlstd{y} \hlkwb{=} \hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlkwd{cumsum}\hlstd{(}\hlkwd{ifelse}\hlstd{(gostop,}\hlnum{0}\hlstd{, dir)))}
+  \hlkwd{new}\hlstd{(}\hlstr{"rw"}\hlstd{,} \hlkwc{x} \hlstd{= x,} \hlkwc{y} \hlstd{= y,} \hlkwc{n} \hlstd{= n)}
+\hlstd{\}}
+
+\hlcom{# print method}
+\hlstd{print} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{object}\hlstd{) \{}
+  \hlstd{n} \hlkwb{=} \hlkwd{as.integer}\hlstd{(object}\hlopt{@}\hlkwc{n}\hlstd{)}
+  \hlkwd{paste0}\hlstd{(}\hlstr{"final (x,y) coordinate : ("}\hlstd{, (object}\hlopt{@}\hlkwc{x}\hlstd{)[n}\hlopt{+}\hlnum{1}\hlstd{],} \hlstr{","} \hlstd{, (object}\hlopt{@}\hlkwc{y}\hlstd{)[n}\hlopt{+}\hlnum{1}\hlstd{],} \hlstr{")"}\hlstd{)}
+\hlstd{\}}
+
+
+\hlcom{# operator}
+\hlstr{"|"} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{object}\hlstd{,} \hlkwc{i}\hlstd{) \{}
+  \hlkwd{paste0}\hlstd{(}\hlstr{"position at "}\hlstd{, i ,}\hlstr{"th step : ("}\hlstd{, object}\hlopt{@}\hlkwc{x}\hlstd{[i],} \hlstr{","}\hlstd{, object}\hlopt{@}\hlkwc{y}\hlstd{[i],} \hlstr{")"}\hlstd{)}
+\hlstd{\}}
+
+\hlcom{# start method}
+\hlstd{start} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{object}\hlstd{,} \hlkwc{n1}\hlstd{,}\hlkwc{n2}\hlstd{) \{}
+  \hlstd{n} \hlkwb{=} \hlkwd{as.integer}\hlstd{(object}\hlopt{@}\hlkwc{n}\hlstd{)}
+  \hlstd{object}\hlopt{@}\hlkwc{x} \hlkwb{<-} \hlstd{object}\hlopt{@}\hlkwc{x} \hlopt{+} \hlstd{n1}
+  \hlstd{object}\hlopt{@}\hlkwc{y} \hlkwb{<-} \hlstd{object}\hlopt{@}\hlkwc{y} \hlopt{+} \hlstd{n2}
+  \hlkwd{return}\hlstd{(object)}
+\hlstd{\}}
+
+\hlcom{# some examples}
+\hlstd{rw1} \hlkwb{<-} \hlkwd{random}\hlstd{(x,y,}\hlnum{5}\hlstd{)}
+\hlkwd{print}\hlstd{(rw1)}
+\end{alltt}
+\begin{verbatim}
+## [1] "final (x,y) coordinate : (-1,-4)"
+\end{verbatim}
+\begin{alltt}
+\hlstd{rw1} \hlkwb{<-} \hlkwd{start}\hlstd{(rw1,}\hlnum{3}\hlstd{,}\hlnum{1}\hlstd{)}
+\hlkwd{print}\hlstd{(rw1)}
+\end{alltt}
+\begin{verbatim}
+## [1] "final (x,y) coordinate : (2,-3)"
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 5 (a)}
+
+In this question, we use gc() function to observe how the memory usage
+has changed. 
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{install.packages}\hlstd{(}\hlstr{"inline"}\hlstd{)}
+\end{alltt}
+
+
+{\ttfamily\noindent\itshape\color{messagecolor}{\#\# Installing package into '/Users/stephaniekim/Library/R/3.1/library'\\\#\# (as 'lib' is unspecified)}}
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: trying to use CRAN without setting a mirror}}\begin{alltt}
+\hlkwd{library}\hlstd{(inline)}
+
+\hlcom{# this code is simply a placeholder to demonstrate that I can }
+\hlcom{# modify the input arguments as desired in C; }
+\hlcom{# in reality 'src' would contain substantive computations}
+
+\hlstd{src} \hlkwb{<-} \hlstr{"\textbackslash{}n tablex[0] = 7;\textbackslash{}n"}
+
+\hlstd{dummyFun} \hlkwb{<-} \hlkwd{cfunction}\hlstd{(}\hlkwd{signature}\hlstd{(}\hlkwc{tablex} \hlstd{=} \hlstr{"integer"}\hlstd{,} \hlkwc{tabley} \hlstd{=} \hlstr{"integer"}\hlstd{,} \hlkwc{xvar} \hlstd{=} \hlstr{"integer"}\hlstd{,} \hlkwc{yvar} \hlstd{=} \hlstr{"integer"}\hlstd{,} \hlkwc{useline} \hlstd{=} \hlstr{"integer"}\hlstd{,}\hlkwc{n} \hlstd{=} \hlstr{"integer"}\hlstd{), src,} \hlkwc{convention} \hlstd{=} \hlstr{".C"}\hlstd{)}
+
+\hlstd{n}\hlkwb{<-}\hlnum{1e7}
+\hlkwd{gc}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+##          used (Mb) gc trigger (Mb) max used (Mb)
+## Ncells 365472 19.6     531268 28.4   467875 25.0
+## Vcells 660539  5.1    1300721 10.0  1031040  7.9
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Used Mb = 5.1}
+
+\hlstd{xvar1}\hlkwb{<-}\hlkwd{sample}\hlstd{(}\hlkwd{c}\hlstd{(}\hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{20}\hlstd{,}\hlkwc{by}\hlstd{=}\hlnum{1}\hlstd{),}\hlnum{NA}\hlstd{),n,}\hlkwc{replace}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\hlkwd{gc}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+##            used (Mb) gc trigger  (Mb) max used  (Mb)
+## Ncells   366019 19.6     667722  35.7   467875  25.0
+## Vcells 10661521 81.4   21939752 167.4 20672994 157.8
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Used Mb = 81.4}
+\hlcom{# Used Mb increases by 76.3 (approximately 80) after xvar1 is created }
+\hlcom{# integers take 4 btyes per value }
+\hlcom{# 4*20=80}
+
+\hlstd{yvar1}\hlkwb{<-}\hlkwd{sample}\hlstd{(}\hlkwd{c}\hlstd{(}\hlkwd{seq}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{20}\hlstd{,}\hlkwc{by}\hlstd{=}\hlnum{1}\hlstd{),}\hlnum{NA}\hlstd{),n,}\hlkwc{replace}\hlstd{=}\hlnum{TRUE}\hlstd{)}
+\hlkwd{gc}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+##            used  (Mb) gc trigger  (Mb) max used  (Mb)
+## Ncells   366065  19.6     667722  35.7   467875  25.0
+## Vcells 20661571 157.7   32439805 247.5 30673044 234.1
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Used Mb = 157.7}
+\hlcom{# Used Mb increases by 76.3 (approximately 80) after yvar1 is created }
+\hlcom{# integers take 4 bytes per value }
+\hlcom{# 4*20=80}
+
+
+\hlcom{# fastcount is a function that prints out a list called result}
+\hlstd{fastcount} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{xvar}\hlstd{,}\hlkwc{yvar}\hlstd{) \{}
+  \hlstd{nalineX} \hlkwb{<-} \hlkwd{is.na}\hlstd{(xvar)}
+  \hlstd{gc1} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{nalineY} \hlkwb{<-} \hlkwd{is.na}\hlstd{(yvar)}
+  \hlstd{gc2} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{xvar[nalineX} \hlopt{|} \hlstd{nalineY]} \hlkwb{<-} \hlnum{0}
+  \hlstd{gc3} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{yvar[nalineX} \hlopt{|} \hlstd{nalineY]} \hlkwb{<-} \hlnum{0}
+  \hlstd{gc4} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{useline} \hlkwb{<-} \hlopt{!}\hlstd{(nalineX} \hlopt{|} \hlstd{nalineY);}
+  \hlstd{gc5} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{tablex} \hlkwb{<-} \hlkwd{numeric}\hlstd{(}\hlkwd{max}\hlstd{(xvar)}\hlopt{+}\hlnum{1}\hlstd{)}
+  \hlstd{gc6} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{tabley} \hlkwb{<-} \hlkwd{numeric}\hlstd{(}\hlkwd{max}\hlstd{(yvar)}\hlopt{+}\hlnum{1}\hlstd{)}
+  \hlstd{gc7} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlkwd{stopifnot}\hlstd{(}\hlkwd{length}\hlstd{(xvar)} \hlopt{==} \hlkwd{length}\hlstd{(yvar))}
+  \hlstd{gc8} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+ \hlstd{res} \hlkwb{<-} \hlkwd{dummyFun}\hlstd{(}     \hlkwc{tablex} \hlstd{=} \hlkwd{as.integer}\hlstd{(tablex),} \hlkwc{tabley} \hlstd{=} \hlkwd{as.integer}\hlstd{(tabley),}     \hlkwd{as.integer}\hlstd{(xvar),} \hlkwd{as.integer}\hlstd{(yvar),} \hlkwd{as.integer}\hlstd{(useline),}     \hlkwd{as.integer}\hlstd{(}\hlkwd{length}\hlstd{(xvar)))}
+  \hlstd{gc9} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{xuse} \hlkwb{<-} \hlkwd{which}\hlstd{(res}\hlopt{$}\hlstd{tablex} \hlopt{>} \hlnum{0}\hlstd{)}
+  \hlstd{gc10} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{xnames} \hlkwb{<-} \hlstd{xuse} \hlopt{-} \hlnum{1}
+  \hlstd{gc11} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{resb} \hlkwb{<-} \hlkwd{rbind}\hlstd{(res}\hlopt{$}\hlstd{tablex[xuse], res}\hlopt{$}\hlstd{tabley[xuse])}
+  \hlstd{gc12} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlkwd{colnames}\hlstd{(resb)} \hlkwb{<-} \hlstd{xnames}
+  \hlstd{gc13} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{result} \hlkwb{<-} \hlkwd{list}\hlstd{(gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc10, gc11, gc12, gc13,resb)}
+  \hlstd{result}
+\hlstd{\}}
+
+
+\hlkwd{fastcount}\hlstd{(xvar1,yvar1)}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: trying to get slot "{}x"{} from an object of a basic class ("{}logical"{}) with no slots}}\begin{alltt}
+\hlcom{# 1st observation:}
+\hlcom{# Used Mb increases by approximately 40 after nalineX and nalineY are created}
+\hlcom{# this is because booleans take 4 bytes per value}
+
+\hlcom{# 2nd observation:}
+\hlcom{# Used Mb increases by approximately 80 }
+\hlcom{# after xvar[nalineX | nalineY] and yvar[nalineX | nalineY] are created}
+\hlcom{# this is because the xvar and yvar are copied (used memory doubles)}
+
+\hlcom{# 3rd observation:}
+\hlcom{# Used Mb reaches its maximum after res is created}
+
+
+\hlkwd{gc}\hlstd{()}
+\end{alltt}
+\begin{verbatim}
+##            used  (Mb) gc trigger  (Mb) max used  (Mb)
+## Ncells   366604  19.6     667722  35.7   467875  25.0
+## Vcells 20661914 157.7   42940107 327.7 40675364 310.4
+\end{verbatim}
+\begin{alltt}
+\hlcom{# Used Mb returns back to the amount before the function }
+\hlcom{# when the function is over}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 5 (b)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# do not create nalineX and nalineY, use is.na instead}
+
+\hlstd{fastcount2} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{xvar}\hlstd{,}\hlkwc{yvar}\hlstd{) \{}
+  \hlstd{xvar[}\hlkwd{is.na}\hlstd{(xvar)} \hlopt{|} \hlkwd{is.na}\hlstd{(yvar)]} \hlkwb{<-} \hlnum{0}
+  \hlstd{gc1} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{yvar[}\hlkwd{is.na}\hlstd{(xvar)} \hlopt{|} \hlkwd{is.na}\hlstd{(yvar)]} \hlkwb{<-} \hlnum{0}
+  \hlstd{gc2} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{useline} \hlkwb{<-} \hlopt{!}\hlstd{(}\hlkwd{is.na}\hlstd{(xvar)} \hlopt{|} \hlkwd{is.na}\hlstd{(yvar))}
+  \hlstd{gc3} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{tablex} \hlkwb{<-} \hlkwd{numeric}\hlstd{(}\hlkwd{max}\hlstd{(xvar)}\hlopt{+}\hlnum{1}\hlstd{)}
+  \hlstd{gc4} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{tabley} \hlkwb{<-} \hlkwd{numeric}\hlstd{(}\hlkwd{max}\hlstd{(yvar)}\hlopt{+}\hlnum{1}\hlstd{)}
+  \hlstd{gc5} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlkwd{stopifnot}\hlstd{(}\hlkwd{length}\hlstd{(xvar)} \hlopt{==} \hlkwd{length}\hlstd{(yvar))}
+  \hlstd{gc6} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{res} \hlkwb{<-} \hlkwd{dummyFun}\hlstd{(}
+    \hlkwc{tablex} \hlstd{=} \hlkwd{as.integer}\hlstd{(tablex),} \hlkwc{tabley} \hlstd{=} \hlkwd{as.integer}\hlstd{(tabley),}     \hlkwd{as.integer}\hlstd{(xvar),} \hlkwd{as.integer}\hlstd{(yvar),} \hlkwd{as.integer}\hlstd{(useline),}     \hlkwd{as.integer}\hlstd{(}\hlkwd{length}\hlstd{(xvar)))}
+  \hlstd{gc7} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{xuse} \hlkwb{<-} \hlkwd{which}\hlstd{(res}\hlopt{$}\hlstd{tablex} \hlopt{>} \hlnum{0}\hlstd{)}
+  \hlstd{gc8} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{xnames} \hlkwb{<-} \hlstd{xuse} \hlopt{-} \hlnum{1}
+  \hlstd{gc9} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{resb} \hlkwb{<-} \hlkwd{rbind}\hlstd{(res}\hlopt{$}\hlstd{tablex[xuse], res}\hlopt{$}\hlstd{tabley[xuse])}
+  \hlstd{gc10} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlkwd{colnames}\hlstd{(resb)} \hlkwb{<-} \hlstd{xnames}
+  \hlstd{gc11} \hlkwb{<-} \hlkwd{gc}\hlstd{()}
+  \hlstd{result2} \hlkwb{<-} \hlkwd{list}\hlstd{(gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc10, gc11,resb)}
+  \hlstd{result2}
+\hlstd{\}}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 6 (original code)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{load}\hlstd{(}\hlstr{'~/stat243-fall-2014/ps/ps4prob6.Rda'}\hlstd{)} \hlcom{# should have A, n, K}
+\hlstd{ll} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{Theta}\hlstd{,} \hlkwc{A}\hlstd{) \{}
+  \hlstd{sum.ind} \hlkwb{<-} \hlkwd{which}\hlstd{(A}\hlopt{==}\hlnum{1}\hlstd{,} \hlkwc{arr.ind}\hlstd{=T)}
+  \hlstd{logLik} \hlkwb{<-} \hlkwd{sum}\hlstd{(}\hlkwd{log}\hlstd{(Theta[sum.ind]))} \hlopt{-} \hlkwd{sum}\hlstd{(Theta)}
+  \hlkwd{return}\hlstd{(logLik)}
+\hlstd{\}}
+
+\hlstd{oneUpdate} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{A}\hlstd{,} \hlkwc{n}\hlstd{,} \hlkwc{K}\hlstd{,} \hlkwc{theta.old}\hlstd{,} \hlkwc{thresh} \hlstd{=} \hlnum{0.1}\hlstd{) \{}
+  \hlstd{theta.old1} \hlkwb{<-} \hlstd{theta.old}
+  \hlstd{Theta.old} \hlkwb{<-} \hlstd{theta.old} \hlopt{%*%} \hlkwd{t}\hlstd{(theta.old)}
+  \hlstd{L.old} \hlkwb{<-} \hlkwd{ll}\hlstd{(Theta.old, A)}
+  \hlstd{q} \hlkwb{<-} \hlkwd{array}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{dim} \hlstd{=} \hlkwd{c}\hlstd{(n, n, K))}
+
+  \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
+    \hlkwa{for} \hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{}
+      \hlkwa{for} \hlstd{(z} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{K) \{}
+        \hlkwa{if} \hlstd{(theta.old[i, z]}\hlopt{*}\hlstd{theta.old[j, z]} \hlopt{==} \hlnum{0}\hlstd{)\{}
+          \hlstd{q[i, j, z]} \hlkwb{<-} \hlnum{0}
+        \hlstd{\}} \hlkwa{else} \hlstd{\{}
+          \hlstd{q[i, j, z]} \hlkwb{<-} \hlstd{theta.old[i, z]}\hlopt{*}\hlstd{theta.old[j, z]} \hlopt{/}
+            \hlstd{Theta.old[i, j]}
+        \hlstd{\}}
+      \hlstd{\}}
+    \hlstd{\}}
+  \hlstd{\}}
+
+  \hlstd{theta.new} \hlkwb{<-} \hlstd{theta.old}
+  \hlkwa{for} \hlstd{(z} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{K) \{}
+    \hlstd{theta.new[,z]} \hlkwb{<-} \hlkwd{rowSums}\hlstd{(A}\hlopt{*}\hlstd{q[,,z])}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{sum}\hlstd{(A}\hlopt{*}\hlstd{q[,,z]))}
+  \hlstd{\}}
+  \hlstd{Theta.new} \hlkwb{<-} \hlstd{theta.new} \hlopt{%*%} \hlkwd{t}\hlstd{(theta.new)}
+  \hlstd{L.new} \hlkwb{<-} \hlkwd{ll}\hlstd{(Theta.new, A)}
+  \hlstd{converge.check} \hlkwb{<-} \hlkwd{abs}\hlstd{(L.new} \hlopt{-} \hlstd{L.old)} \hlopt{<} \hlstd{thresh}
+  \hlstd{theta.new} \hlkwb{<-} \hlstd{theta.new}\hlopt{/}\hlkwd{rowSums}\hlstd{(theta.new)}
+  \hlkwd{return}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{theta} \hlstd{= theta.new,} \hlkwc{loglik} \hlstd{= L.new,}
+              \hlkwc{converged} \hlstd{= converge.check))}
+\hlstd{\}}
+
+\hlstd{temp} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{runif}\hlstd{(n}\hlopt{*}\hlstd{K), n, K)}
+\hlstd{theta.init} \hlkwb{<-} \hlstd{temp}\hlopt{/}\hlkwd{rowSums}\hlstd{(temp)}
+
+\hlstd{out} \hlkwb{<-} \hlkwd{oneUpdate}\hlstd{(A, n, K, theta.init)}
+\hlkwd{system.time}\hlstd{(out} \hlkwb{<-} \hlkwd{oneUpdate}\hlstd{(A, n, K, theta.init))}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The original code takes 132 seconds.
+
+
+\section*{Number 6}
+
+I improved the code by fixing the three nested for loops.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{load}\hlstd{(}\hlstr{'~/stat243-fall-2014/ps/ps4prob6.Rda'}\hlstd{)} \hlcom{# should have A, n, K}
+\hlstd{ll} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{Theta}\hlstd{,} \hlkwc{A}\hlstd{) \{}
+  \hlstd{logLik} \hlkwb{<-} \hlkwd{sum}\hlstd{(}\hlkwd{log}\hlstd{(Theta[}\hlkwd{which}\hlstd{(A}\hlopt{==}\hlnum{1}\hlstd{,} \hlkwc{arr.ind}\hlstd{=T)]))} \hlopt{-} \hlkwd{sum}\hlstd{(Theta)}
+  \hlkwd{return}\hlstd{(logLik)}
+\hlstd{\}}
+
+\hlstd{oneUpdate} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{A}\hlstd{,} \hlkwc{n}\hlstd{,} \hlkwc{K}\hlstd{,} \hlkwc{theta.old}\hlstd{,} \hlkwc{thresh} \hlstd{=} \hlnum{0.1}\hlstd{) \{}
+  \hlstd{theta.old1} \hlkwb{<-} \hlstd{theta.old}
+  \hlstd{Theta.old} \hlkwb{<-} \hlstd{theta.old} \hlopt{%*%} \hlkwd{t}\hlstd{(theta.old)}
+  \hlstd{L.old} \hlkwb{<-} \hlkwd{ll}\hlstd{(Theta.old, A)}
+  \hlstd{q} \hlkwb{<-} \hlkwd{array}\hlstd{(}\hlnum{0}\hlstd{,} \hlkwc{dim} \hlstd{=} \hlkwd{c}\hlstd{(n, n, K))}
+
+ \hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n) \{ q[i,,]} \hlkwb{<-} \hlkwd{t}\hlstd{(theta.old[i, ]}\hlopt{*}\hlkwd{t}\hlstd{(theta.old))}\hlopt{/}\hlstd{Theta.old[i, ]\}}
+  \hlstd{theta.new} \hlkwb{<-} \hlstd{theta.old}
+  \hlkwa{for} \hlstd{(z} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{K) \{}
+    \hlstd{theta.new[,z]} \hlkwb{<-} \hlkwd{rowSums}\hlstd{(A}\hlopt{*}\hlstd{q[,,z])}\hlopt{/}\hlkwd{sqrt}\hlstd{(}\hlkwd{sum}\hlstd{(A}\hlopt{*}\hlstd{q[,,z]))}
+  \hlstd{\}}
+  \hlstd{Theta.new} \hlkwb{<-} \hlstd{theta.new} \hlopt{%*%} \hlkwd{t}\hlstd{(theta.new)}
+  \hlstd{L.new} \hlkwb{<-} \hlkwd{ll}\hlstd{(Theta.new, A)}
+  \hlstd{converge.check} \hlkwb{<-} \hlkwd{abs}\hlstd{(L.new} \hlopt{-} \hlstd{L.old)} \hlopt{<} \hlstd{thresh}
+  \hlstd{theta.new} \hlkwb{<-} \hlstd{theta.new}\hlopt{/}\hlkwd{rowSums}\hlstd{(theta.new)}
+  \hlkwd{return}\hlstd{(}\hlkwd{list}\hlstd{(}\hlkwc{theta} \hlstd{= theta.new,} \hlkwc{loglik} \hlstd{= L.new,}
+              \hlkwc{converged} \hlstd{= converge.check))}
+\hlstd{\}}
+
+\hlkwd{set.seed}\hlstd{(}\hlnum{1}\hlstd{)}
+\hlstd{temp} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlkwd{runif}\hlstd{(n}\hlopt{*}\hlstd{K), n, K)}
+\hlkwd{set.seed}\hlstd{(}\hlnum{1}\hlstd{)}
+\hlstd{theta.init} \hlkwb{<-} \hlstd{temp}\hlopt{/}\hlkwd{rowSums}\hlstd{(temp)}
+
+\hlkwd{system.time}\hlstd{(out} \hlkwb{<-} \hlkwd{oneUpdate}\hlstd{(A, n, K, theta.init))}
+\end{alltt}
+\begin{verbatim}
+##    user  system elapsed 
+##   4.019   0.624   4.716
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+Now the updated code takes approximately 4 seconds
+\end{document}

@@ -1,0 +1,2391 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.54cm
+\topmargin 2.54cm
+\rightmargin 2.54cm
+\bottommargin 2.54cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Stat 243
+\end_layout
+
+\begin_layout Title
+Problem Set 4
+\end_layout
+
+\begin_layout Author
+Stephanie Kim
+\end_layout
+
+\begin_layout Author
+github : stephaniesookim
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+/raggedright
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 1
+\end_layout
+
+\begin_layout Standard
+Since the result we are trying to return is x+y (5th line), we get the value
+ of x first.
+ Also, we can observe that the value of y is defined inside the declaration
+ of x as 1.
+ So in this case, x+y = 2 + 1 = 3.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+f1 <- function(x={y <- 1
+\end_layout
+
+\begin_layout Plain Layout
+
+				  2}
+\end_layout
+
+\begin_layout Plain Layout
+
+			   , y=0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  x+y
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+f1()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+On the other hand in the below case, since the result we are trying to return
+ is y+x, we get the value of y first.
+ So in this case, y+x = 0 + 2 = 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+f2 <- function(x={y <- 1
+\end_layout
+
+\begin_layout Plain Layout
+
+				  2}
+\end_layout
+
+\begin_layout Plain Layout
+
+			   , y=0) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  y+x
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+f2()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+library(rbenchmark)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# plotfun is a function that plots the elapsed time of subsetting method
+\end_layout
+
+\begin_layout Plain Layout
+
+# by vector of indices and vector of logical values
+\end_layout
+
+\begin_layout Plain Layout
+
+# by observing the plot, we can see which method takes shorter time
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+plotfun <- function(n) {
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	x <- indicestime <- booleanstime <- time(as.numeric(NA), n)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	# run a for loop for 1,2,..,n
+\end_layout
+
+\begin_layout Plain Layout
+
+	# we set the length of vector be 10^i
+\end_layout
+
+\begin_layout Plain Layout
+
+	# indices is a function that subsets a vector based on vector of indices
+\end_layout
+
+\begin_layout Plain Layout
+
+	# booleans is a function that subsets a vector based on vector of logical
+ values (booleans)
+\end_layout
+
+\begin_layout Plain Layout
+
+	# indicestime[i] is the elapsed time of the 1st method
+\end_layout
+
+\begin_layout Plain Layout
+
+	# booleanstime[i] is the elapsed time of the 2nd method
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	for (i in 1:n) {
+\end_layout
+
+\begin_layout Plain Layout
+
+		x[i] <- y <- 10^i
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        indices <- function(y) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      	ind <- c(1:y)
+\end_layout
+
+\begin_layout Plain Layout
+
+      	ind[c(1:floor(y^1/2))]
+\end_layout
+
+\begin_layout Plain Layout
+
+    	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		booleans <- function(y) {
+\end_layout
+
+\begin_layout Plain Layout
+
+		  bool <- c(1:y)
+\end_layout
+
+\begin_layout Plain Layout
+
+		  subset(bool, bool <= floor(y^1/2))
+\end_layout
+
+\begin_layout Plain Layout
+
+    	}
+\end_layout
+
+\begin_layout Plain Layout
+
+         
+\end_layout
+
+\begin_layout Plain Layout
+
+		time <- benchmark(indices(y), booleans(y), replications = 10, 
+\end_layout
+
+\begin_layout Plain Layout
+
+							columns=c('test', 'elapsed', 'replications'))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+        indicestime[i] <- time[1,2]
+\end_layout
+
+\begin_layout Plain Layout
+
+    	booleanstime[i] <- time[2,2]
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	# we plot elapsed time changing over the length of a vector for each method
+\end_layout
+
+\begin_layout Plain Layout
+
+	plot(booleanstime,  type="o", col="red", xlab="length of the vector",
+\end_layout
+
+\begin_layout Plain Layout
+
+		ylab="time", xaxt='n')
+\end_layout
+
+\begin_layout Plain Layout
+
+	points(indicestime,  type="o", col="blue")
+\end_layout
+
+\begin_layout Plain Layout
+
+	axis(1, at=1:length(x), labels=x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	# then we return the plots
+\end_layout
+
+\begin_layout Plain Layout
+
+	return(list(t1=booleanstime, t2=indicestime))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's print out the plot when n=5
+\end_layout
+
+\begin_layout Plain Layout
+
+plotfun(5) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# from the plot, we can see that subsetting by indices is more efficient
+ than subsetting by booleans
+\end_layout
+
+\begin_layout Plain Layout
+
+# this is because the 1st method only goes through 1,2,..,floor(y^1/2) elements
+\end_layout
+
+\begin_layout Plain Layout
+
+# while the 2nd method goes through the whole vector
+\end_layout
+
+\begin_layout Plain Layout
+
+# the gap will be greater as the length of a vector gets longer
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 3 (a)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# we use .Internal(inspect(dat)); gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+# to inspect into the structure of the data frame
+\end_layout
+
+\begin_layout Plain Layout
+
+# and where in memory different parts of the data frame are stored
+\end_layout
+
+\begin_layout Plain Layout
+
+# let's compare how it changes before and after we change one element
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+dat <- read.csv("cpds.csv", head = TRUE, sep = ",")
+\end_layout
+
+\begin_layout Plain Layout
+
+.Internal(inspect(dat)); gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+datcopy[1,1] <- 2000
+\end_layout
+
+\begin_layout Plain Layout
+
+.Internal(inspect(datcopy)); gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# the entire data frame is not copied
+\end_layout
+
+\begin_layout Plain Layout
+
+# the element is simply replaced without the entire column being copied
+\end_layout
+
+\begin_layout Plain Layout
+
+# the memory address of the changed column change with others unchanged
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 3 (b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+v1 <- 1:10
+\end_layout
+
+\begin_layout Plain Layout
+
+v2 <- 1:10
+\end_layout
+
+\begin_layout Plain Layout
+
+v3 <- 1:10
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+vlist <- list(v1, v2, v3)
+\end_layout
+
+\begin_layout Plain Layout
+
+.Internal(inspect(vlist)); gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+vlist[[1]][1] <- 10
+\end_layout
+
+\begin_layout Plain Layout
+
+.Internal(inspect(vlist)); gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# the entire list is not copied
+\end_layout
+
+\begin_layout Plain Layout
+
+# the element is simply replaced without the entire list being copied
+\end_layout
+
+\begin_layout Plain Layout
+
+# the memory address of the changed vector (v1) change with others unchanged
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 4 (a), (c)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# randomwalk is a function that shows the (x,y) coordinate of n random walk
+\end_layout
+
+\begin_layout Plain Layout
+
+# it will print the whole path only when Full=T
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk <- function(n, Full = F){
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+    #for no step   
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (n==0){
+\end_layout
+
+\begin_layout Plain Layout
+
+    	paste0("no step: (0,0)")
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\end_layout
+
+\begin_layout Plain Layout
+
+	#for negative input
+\end_layout
+
+\begin_layout Plain Layout
+
+	else if (n<0){
+\end_layout
+
+\begin_layout Plain Layout
+
+    	paste0("invalid (negative) input argument")
+\end_layout
+
+\begin_layout Plain Layout
+
+	}      
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	else{
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	#cast as integer if n is not integer
+\end_layout
+
+\begin_layout Plain Layout
+
+	n = as.integer(n)
+\end_layout
+
+\begin_layout Plain Layout
+
+       
+\end_layout
+
+\begin_layout Plain Layout
+
+	# gostop = vector of T/F      
+\end_layout
+
+\begin_layout Plain Layout
+
+	# randomly generate n-1 number for 0 to 1 (uniform) if greater than 0.5
+ True or False     
+\end_layout
+
+\begin_layout Plain Layout
+
+	gostop = runif(n, min = 0, max = 1) > 0.5        
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	# dir = vector of 1/-1     
+\end_layout
+
+\begin_layout Plain Layout
+
+	# T = 1, F = 0, multiply by 2 - 1 become 1 and -1     
+\end_layout
+
+\begin_layout Plain Layout
+
+	dir = 2*(runif(n, min = 0, max = 1) > 0.5)-1        
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	# ifelse (gostop,dir,0)     
+\end_layout
+
+\begin_layout Plain Layout
+
+	# for every nth element of list gostop of T/F
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if T => nth element of dir 
+\end_layout
+
+\begin_layout Plain Layout
+
+	# if F => nth element of 0       
+\end_layout
+
+\begin_layout Plain Layout
+
+	# cumsum = cumulative sum     
+\end_layout
+
+\begin_layout Plain Layout
+
+	x = c(0,cumsum(ifelse(gostop,dir,0)))     
+\end_layout
+
+\begin_layout Plain Layout
+
+	y = c(0,cumsum(ifelse(gostop,0, dir)))          
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	#print Full     
+\end_layout
+
+\begin_layout Plain Layout
+
+	if (Full == TRUE) {           
+\end_layout
+
+\begin_layout Plain Layout
+
+		printx <- function(x,n) {         
+\end_layout
+
+\begin_layout Plain Layout
+
+			char = (paste0("(x,y) coordinate : (", x[n]))       
+\end_layout
+
+\begin_layout Plain Layout
+
+		}           
+\end_layout
+
+\begin_layout Plain Layout
+
+		printy <- function(y,n) {         
+\end_layout
+
+\begin_layout Plain Layout
+
+			char = (paste0(",", y[n], ")"))       
+\end_layout
+
+\begin_layout Plain Layout
+
+		}              
+\end_layout
+
+\begin_layout Plain Layout
+
+		pathx <- sapply(x,printx)       
+\end_layout
+
+\begin_layout Plain Layout
+
+		pathy <- sapply(y,printy)       
+\end_layout
+
+\begin_layout Plain Layout
+
+		print(paste0(pathx, pathy))     
+\end_layout
+
+\begin_layout Plain Layout
+
+		}        
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	#print result     
+\end_layout
+
+\begin_layout Plain Layout
+
+	else if (Full == FALSE) {       
+\end_layout
+
+\begin_layout Plain Layout
+
+		char = (paste0("(x,y) coordinate : (", x[n+1], ",", y[n+1], ")"))    
+   
+\end_layout
+
+\begin_layout Plain Layout
+
+		print(char)     
+\end_layout
+
+\begin_layout Plain Layout
+
+		}   
+\end_layout
+
+\begin_layout Plain Layout
+
+	} 
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#some examples
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(0)
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(-3.9)
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(1,Full=T)
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(4.9, Full=T) 
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(5,Full=T)
+\end_layout
+
+\begin_layout Plain Layout
+
+randomwalk(5) 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 4 (b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## formal s4 class OOP
+\end_layout
+
+\begin_layout Plain Layout
+
+library(methods)
+\end_layout
+
+\begin_layout Plain Layout
+
+setClass("rw",representation(x = "vector", y = "vector", n = "numeric"))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# constructor
+\end_layout
+
+\begin_layout Plain Layout
+
+# this is function that generates the class, rw
+\end_layout
+
+\begin_layout Plain Layout
+
+random <- function(x, y, n) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  n = as.integer(n)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gostop = runif(n, min = 0, max = 1) > 0.5
+\end_layout
+
+\begin_layout Plain Layout
+
+  dir = 2*(runif(n, min = 0, max = 1) > 0.5) - 1
+\end_layout
+
+\begin_layout Plain Layout
+
+  x = c(0,cumsum(ifelse(gostop,dir,0)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  y = c(0,cumsum(ifelse(gostop,0, dir)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  new("rw", x = x, y = y, n = n)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# print method
+\end_layout
+
+\begin_layout Plain Layout
+
+print <- function(object) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  n = as.integer(object@n)
+\end_layout
+
+\begin_layout Plain Layout
+
+  paste0("final (x,y) coordinate : (", (object@x)[n+1], "," , (object@y)[n+1],
+ ")")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# operator
+\end_layout
+
+\begin_layout Plain Layout
+
+"|" <- function(object, i) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  paste0("position at ", i ,"th step : (", object@x[i], ",", object@y[i],
+ ")")
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# start method
+\end_layout
+
+\begin_layout Plain Layout
+
+start <- function(object, n1,n2) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  n = as.integer(object@n)
+\end_layout
+
+\begin_layout Plain Layout
+
+  object@x <- object@x + n1
+\end_layout
+
+\begin_layout Plain Layout
+
+  object@y <- object@y + n2
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(object)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# some examples
+\end_layout
+
+\begin_layout Plain Layout
+
+rw1 <- random(x,y,5)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(rw1)
+\end_layout
+
+\begin_layout Plain Layout
+
+rw1 <- start(rw1,3,1)
+\end_layout
+
+\begin_layout Plain Layout
+
+print(rw1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 5 (a)
+\end_layout
+
+\begin_layout Standard
+In this question, we use gc() function to observe how the memory usage has
+ changed.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+install.packages("inline")
+\end_layout
+
+\begin_layout Plain Layout
+
+library(inline)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# this code is simply a placeholder to demonstrate that I can 
+\end_layout
+
+\begin_layout Plain Layout
+
+# modify the input arguments as desired in C; 
+\end_layout
+
+\begin_layout Plain Layout
+
+# in reality 'src' would contain substantive computations
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+src <- "
+\backslash
+n tablex[0] = 7;
+\backslash
+n"
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+dummyFun <- cfunction(signature(tablex = "integer", tabley = "integer",
+ xvar = "integer", yvar = "integer", useline = "integer",n = "integer"),
+ src, convention = ".C")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+n<-1e7
+\end_layout
+
+\begin_layout Plain Layout
+
+gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb = 5.1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+xvar1<-sample(c(seq(1,20,by=1),NA),n,replace=TRUE)  
+\end_layout
+
+\begin_layout Plain Layout
+
+gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb = 81.4
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb increases by 76.3 (approximately 80) after xvar1 is created 
+\end_layout
+
+\begin_layout Plain Layout
+
+# integers take 4 btyes per value 
+\end_layout
+
+\begin_layout Plain Layout
+
+# 4*20=80
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+yvar1<-sample(c(seq(1,20,by=1),NA),n,replace=TRUE)
+\end_layout
+
+\begin_layout Plain Layout
+
+gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb = 157.7
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb increases by 76.3 (approximately 80) after yvar1 is created 
+\end_layout
+
+\begin_layout Plain Layout
+
+# integers take 4 bytes per value 
+\end_layout
+
+\begin_layout Plain Layout
+
+# 4*20=80
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# fastcount is a function that prints out a list called result
+\end_layout
+
+\begin_layout Plain Layout
+
+fastcount <- function(xvar,yvar) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  nalineX <- is.na(xvar)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc1 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  nalineY <- is.na(yvar)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc2 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  xvar[nalineX | nalineY] <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc3 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  yvar[nalineX | nalineY] <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc4 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  useline <- !(nalineX | nalineY);
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc5 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  tablex <- numeric(max(xvar)+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc6 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  tabley <- numeric(max(yvar)+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc7 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  stopifnot(length(xvar) == length(yvar))
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc8 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+ res <- dummyFun(     tablex = as.integer(tablex), tabley = as.integer(tabley),
+     as.integer(xvar), as.integer(yvar), as.integer(useline),     as.integer(length(
+xvar)))  
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc9 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  xuse <- which(res$tablex > 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc10 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  xnames <- xuse - 1
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc11 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  resb <- rbind(res$tablex[xuse], res$tabley[xuse])
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc12 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  colnames(resb) <- xnames
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc13 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  result <- list(gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc10, gc11,
+ gc12, gc13,resb)
+\end_layout
+
+\begin_layout Plain Layout
+
+  result
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+fastcount(xvar1,yvar1)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 1st observation:
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb increases by approximately 40 after nalineX and nalineY are created
+\end_layout
+
+\begin_layout Plain Layout
+
+# this is because booleans take 4 bytes per value
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 2nd observation:
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb increases by approximately 80 
+\end_layout
+
+\begin_layout Plain Layout
+
+# after xvar[nalineX | nalineY] and yvar[nalineX | nalineY] are created
+\end_layout
+
+\begin_layout Plain Layout
+
+# this is because the xvar and yvar are copied (used memory doubles)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# 3rd observation:
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb reaches its maximum after res is created
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+gc() 
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# Used Mb returns back to the amount before the function 
+\end_layout
+
+\begin_layout Plain Layout
+
+# when the function is over
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 5 (b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# do not create nalineX and nalineY, use is.na instead
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+fastcount2 <- function(xvar,yvar) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  xvar[is.na(xvar) | is.na(yvar)] <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc1 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  yvar[is.na(xvar) | is.na(yvar)] <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc2 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  useline <- !(is.na(xvar) | is.na(yvar))
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc3 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  tablex <- numeric(max(xvar)+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc4 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  tabley <- numeric(max(yvar)+1)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc5 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  stopifnot(length(xvar) == length(yvar))
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc6 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  res <- dummyFun(
+\end_layout
+
+\begin_layout Plain Layout
+
+    tablex = as.integer(tablex), tabley = as.integer(tabley),     as.integer(xvar),
+ as.integer(yvar), as.integer(useline),     as.integer(length(xvar)))
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc7 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  xuse <- which(res$tablex > 0)
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc8 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  xnames <- xuse - 1
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc9 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  resb <- rbind(res$tablex[xuse], res$tabley[xuse])
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc10 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  colnames(resb) <- xnames
+\end_layout
+
+\begin_layout Plain Layout
+
+  gc11 <- gc()
+\end_layout
+
+\begin_layout Plain Layout
+
+  result2 <- list(gc1, gc2, gc3, gc4, gc5, gc6, gc7, gc8, gc9, gc10, gc11,resb)
+\end_layout
+
+\begin_layout Plain Layout
+
+  result2
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 6 (original code)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+load('~/stat243-fall-2014/ps/ps4prob6.Rda') # should have A, n, K
+\end_layout
+
+\begin_layout Plain Layout
+
+ll <- function(Theta, A) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  sum.ind <- which(A==1, arr.ind=T)
+\end_layout
+
+\begin_layout Plain Layout
+
+  logLik <- sum(log(Theta[sum.ind])) - sum(Theta)
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(logLik)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+oneUpdate <- function(A, n, K, theta.old, thresh = 0.1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  theta.old1 <- theta.old
+\end_layout
+
+\begin_layout Plain Layout
+
+  Theta.old <- theta.old %*% t(theta.old)
+\end_layout
+
+\begin_layout Plain Layout
+
+  L.old <- ll(Theta.old, A)
+\end_layout
+
+\begin_layout Plain Layout
+
+  q <- array(0, dim = c(n, n, K))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  for (i in 1:n) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    for (j in 1:n) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      for (z in 1:K) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        if (theta.old[i, z]*theta.old[j, z] == 0){
+\end_layout
+
+\begin_layout Plain Layout
+
+          q[i, j, z] <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+        } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+          q[i, j, z] <- theta.old[i, z]*theta.old[j, z] /
+\end_layout
+
+\begin_layout Plain Layout
+
+            Theta.old[i, j]
+\end_layout
+
+\begin_layout Plain Layout
+
+        }
+\end_layout
+
+\begin_layout Plain Layout
+
+      }
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  theta.new <- theta.old
+\end_layout
+
+\begin_layout Plain Layout
+
+  for (z in 1:K) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    theta.new[,z] <- rowSums(A*q[,,z])/sqrt(sum(A*q[,,z]))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  Theta.new <- theta.new %*% t(theta.new)
+\end_layout
+
+\begin_layout Plain Layout
+
+  L.new <- ll(Theta.new, A)
+\end_layout
+
+\begin_layout Plain Layout
+
+  converge.check <- abs(L.new - L.old) < thresh
+\end_layout
+
+\begin_layout Plain Layout
+
+  theta.new <- theta.new/rowSums(theta.new)
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(list(theta = theta.new, loglik = L.new,
+\end_layout
+
+\begin_layout Plain Layout
+
+              converged = converge.check))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+temp <- matrix(runif(n*K), n, K)
+\end_layout
+
+\begin_layout Plain Layout
+
+theta.init <- temp/rowSums(temp)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+out <- oneUpdate(A, n, K, theta.init)
+\end_layout
+
+\begin_layout Plain Layout
+
+system.time(out <- oneUpdate(A, n, K, theta.init))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The original code takes 132 seconds.
+\end_layout
+
+\begin_layout Section*
+Number 6
+\end_layout
+
+\begin_layout Standard
+I improved the code by fixing the three nested for loops.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+load('~/stat243-fall-2014/ps/ps4prob6.Rda') # should have A, n, K
+\end_layout
+
+\begin_layout Plain Layout
+
+ll <- function(Theta, A) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  logLik <- sum(log(Theta[which(A==1, arr.ind=T)])) - sum(Theta)
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(logLik)
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+oneUpdate <- function(A, n, K, theta.old, thresh = 0.1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  theta.old1 <- theta.old
+\end_layout
+
+\begin_layout Plain Layout
+
+  Theta.old <- theta.old %*% t(theta.old)
+\end_layout
+
+\begin_layout Plain Layout
+
+  L.old <- ll(Theta.old, A)
+\end_layout
+
+\begin_layout Plain Layout
+
+  q <- array(0, dim = c(n, n, K))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+ for (i in 1:n) { q[i,,] <- t(theta.old[i, ]*t(theta.old))/Theta.old[i, ]}
+\end_layout
+
+\begin_layout Plain Layout
+
+  theta.new <- theta.old
+\end_layout
+
+\begin_layout Plain Layout
+
+  for (z in 1:K) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    theta.new[,z] <- rowSums(A*q[,,z])/sqrt(sum(A*q[,,z]))
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+  Theta.new <- theta.new %*% t(theta.new)
+\end_layout
+
+\begin_layout Plain Layout
+
+  L.new <- ll(Theta.new, A)
+\end_layout
+
+\begin_layout Plain Layout
+
+  converge.check <- abs(L.new - L.old) < thresh
+\end_layout
+
+\begin_layout Plain Layout
+
+  theta.new <- theta.new/rowSums(theta.new)
+\end_layout
+
+\begin_layout Plain Layout
+
+  return(list(theta = theta.new, loglik = L.new,
+\end_layout
+
+\begin_layout Plain Layout
+
+              converged = converge.check))
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+temp <- matrix(runif(n*K), n, K)
+\end_layout
+
+\begin_layout Plain Layout
+
+set.seed(1)
+\end_layout
+
+\begin_layout Plain Layout
+
+theta.init <- temp/rowSums(temp)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+system.time(out <- oneUpdate(A, n, K, theta.init))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Now the updated code takes approximately 4 seconds
+\end_layout
+
+\end_body
+\end_document
