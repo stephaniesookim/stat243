@@ -1,0 +1,747 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.54cm
+\topmargin 2.54cm
+\rightmargin 2.54cm
+\bottommargin 2.54cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Stat 243
+\end_layout
+
+\begin_layout Title
+Problem Set 5
+\end_layout
+
+\begin_layout Author
+Stephanie Kim
+\end_layout
+
+\begin_layout Author
+github: stephaniesookim
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+/raggedright
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 1
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+load("~/stat243-fall-2014/ps/ps5prob1.Rda")
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+log <- X%*%beta
+\end_layout
+
+\begin_layout Plain Layout
+
+p <- exp(log)/(1+exp(log))
+\end_layout
+
+\begin_layout Plain Layout
+
+likelihood<-prod(dbinom(y,n,p))
+\end_layout
+
+\begin_layout Plain Layout
+
+likelihood
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+beta <- c(1,2,3,4)
+\end_layout
+
+\begin_layout Plain Layout
+
+log <- X%*%beta
+\end_layout
+
+\begin_layout Plain Layout
+
+p <- exp(log)/(1+exp(log))
+\end_layout
+
+\begin_layout Plain Layout
+
+likelihood<-prod(dbinom(y,n,p))
+\end_layout
+
+\begin_layout Plain Layout
+
+likelihood
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+From the above, we can observe that the likelihood is 0 regardless of the
+ value of beta.
+ 
+\end_layout
+
+\begin_layout Standard
+This is because of the underflow.
+ Since the number is less than 1e-308, it returns 0.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+logsum <- sum(dbinom(y,n,p,log=T))
+\end_layout
+
+\begin_layout Plain Layout
+
+logsum
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+To avoid this, we can take a log and then sum them up.
+ The result is -1862.331.
+\end_layout
+
+\begin_layout Section*
+Number 2 (a)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+options(digits=22)
+\end_layout
+
+\begin_layout Plain Layout
+
+1.000000000001
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It prints 1.000000000001000088901.
+ 
+\end_layout
+
+\begin_layout Standard
+Thus we have 16 decimal places of accuracy here.
+\end_layout
+
+\begin_layout Section*
+Number 2 (b)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+options(digits=22)
+\end_layout
+
+\begin_layout Plain Layout
+
+x <- c(1, rep(1e-16, 10000))
+\end_layout
+
+\begin_layout Plain Layout
+
+sum(x)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It prints 1.000000000000999644811.
+\end_layout
+
+\begin_layout Standard
+The sum() does not give the right answer up to the accuracy expected from
+ part (a).
+\end_layout
+
+\begin_layout Standard
+We have 12 decimal places of accuracy.
+\end_layout
+
+\begin_layout Section*
+Number 2 (c) : Python
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+import numpy as np 
+\end_layout
+
+\begin_layout Plain Layout
+
+from decimal import Decimal
+\end_layout
+
+\begin_layout Plain Layout
+
+vec=np.array([1e-16]*(10001)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+vec[0]=1 
+\end_layout
+
+\begin_layout Plain Layout
+
+print (np.sum(vec))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## 1.0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+It prints 1.0.
+\end_layout
+
+\begin_layout Standard
+Summation in Python is even less accurate than in R.
+\end_layout
+
+\begin_layout Section*
+Number 2 (d)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+options(digits=22)
+\end_layout
+
+\begin_layout Plain Layout
+
+x <- c(1, rep(1e-16, 10000))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# first for loop
+\end_layout
+
+\begin_layout Plain Layout
+
+fl1 <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 1:length(x)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  fl1 <- fl1 + x[i]
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+fl1
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# second for loop: do the summation with 1 as the last value in the vector
+\end_layout
+
+\begin_layout Plain Layout
+
+fl2 <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 2:length(x)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  fl2 <- fl2 + x[i]
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+fl2 <- fl2 + x[1]
+\end_layout
+
+\begin_layout Plain Layout
+
+fl2
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first for loop returns a wrong value (1).
+\end_layout
+
+\begin_layout Standard
+On the other hand, the second for loop returns a value that has 16 decimal
+ places of accuracy.
+\end_layout
+
+\begin_layout Section*
+Number 2 (d) : Python
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+vec = np.array([1e-16]*(10001)) 
+\end_layout
+
+\begin_layout Plain Layout
+
+vec[0] = 1.0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+#first for loop
+\end_layout
+
+\begin_layout Plain Layout
+
+fl1 = 0 
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(len(vec)):
+\end_layout
+
+\begin_layout Plain Layout
+
+  fl1 += vec[i] 
+\end_layout
+
+\begin_layout Plain Layout
+
+print(Decimal(fl1))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# second for loop: do the summation with 1 as the last value value in the
+ vector
+\end_layout
+
+\begin_layout Plain Layout
+
+fl2 = 0 
+\end_layout
+
+\begin_layout Plain Layout
+
+for i in range(1, len(vec)):
+\end_layout
+
+\begin_layout Plain Layout
+
+  fl2 += vec[i] 
+\end_layout
+
+\begin_layout Plain Layout
+
+fl2 = fl2 + vec[0] 
+\end_layout
+
+\begin_layout Plain Layout
+
+print(Decimal(fl2))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+## 1 
+\end_layout
+
+\begin_layout Plain Layout
+
+## 1.0000000000010000889005823410116136074066162109375
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The first for loop returns a wrong value (1) like in R.
+\end_layout
+
+\begin_layout Standard
+On the other hand, the second for loop returns the right value.
+\end_layout
+
+\begin_layout Section*
+Number 2 (e)
+\end_layout
+
+\begin_layout Standard
+Apparently the results suggest that sum() does not simply sum the numbers
+ from left to right.
+\end_layout
+
+\begin_layout Standard
+The result should have been the same in two for loops if it worked that
+ way.
+\end_layout
+
+\begin_layout Standard
+The difference comes from the fact that we add 1 from the beginning or at
+ last.
+\end_layout
+
+\begin_layout Standard
+Thus we can notice that sum() is more accurate when we sum up numbers with
+ same magnitudes.
+\end_layout
+
+\begin_layout Standard
+It tries to be accurate up to 16 decimal places.
+\end_layout
+
+\begin_layout Section*
+Number 2 (f)
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
