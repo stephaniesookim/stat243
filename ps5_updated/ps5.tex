@@ -1,0 +1,285 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/ps5//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat 243}
+
+
+\title{Problem Set 5}
+
+
+\author{Stephanie Kim}
+
+
+\author{github: stephaniesookim}
+
+\maketitle
+/raggedright
+
+
+\section*{Number 1}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{load}\hlstd{(}\hlstr{"~/stat243-fall-2014/ps/ps5prob1.Rda"}\hlstd{)}
+
+\hlstd{log} \hlkwb{<-} \hlstd{X}\hlopt{%*%}\hlstd{beta}
+\hlstd{p} \hlkwb{<-} \hlkwd{exp}\hlstd{(log)}\hlopt{/}\hlstd{(}\hlnum{1}\hlopt{+}\hlkwd{exp}\hlstd{(log))}
+\hlstd{likelihood}\hlkwb{<-}\hlkwd{prod}\hlstd{(}\hlkwd{dbinom}\hlstd{(y,n,p))}
+\hlstd{likelihood}
+\end{alltt}
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+\begin{alltt}
+\hlstd{beta} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,}\hlnum{2}\hlstd{,}\hlnum{3}\hlstd{,}\hlnum{4}\hlstd{)}
+\hlstd{log} \hlkwb{<-} \hlstd{X}\hlopt{%*%}\hlstd{beta}
+\hlstd{p} \hlkwb{<-} \hlkwd{exp}\hlstd{(log)}\hlopt{/}\hlstd{(}\hlnum{1}\hlopt{+}\hlkwd{exp}\hlstd{(log))}
+\hlstd{likelihood}\hlkwb{<-}\hlkwd{prod}\hlstd{(}\hlkwd{dbinom}\hlstd{(y,n,p))}
+\hlstd{likelihood}
+\end{alltt}
+\begin{verbatim}
+## [1] 0
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+From the above, we can observe that the likelihood is 0 regardless
+of the value of beta. 
+
+This is because of the underflow. Since the number is less than 1e-308,
+it returns 0.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{load}\hlstd{(}\hlstr{"~/stat243-fall-2014/ps/ps5prob1.Rda"}\hlstd{)}
+\hlstd{log} \hlkwb{<-} \hlstd{X}\hlopt{%*%}\hlstd{beta}
+\hlstd{p} \hlkwb{<-} \hlkwd{exp}\hlstd{(log)}\hlopt{/}\hlstd{(}\hlnum{1}\hlopt{+}\hlkwd{exp}\hlstd{(log))}
+\hlstd{logsum} \hlkwb{<-} \hlkwd{sum}\hlstd{(}\hlkwd{dbinom}\hlstd{(y,n,p,}\hlkwc{log}\hlstd{=T))}
+\hlstd{logsum}
+\end{alltt}
+\begin{verbatim}
+## [1] -1862
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+To avoid this, we can take a log and then sum them up. The result
+is -1862.331.
+
+
+\section*{Number 2 (a)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{options}\hlstd{(}\hlkwc{digits}\hlstd{=}\hlnum{22}\hlstd{)}
+\hlnum{1.000000000001}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.000000000001000088901
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+It prints 1.000000000001000088901. 
+
+Thus we have 16 decimal places of accuracy here.
+
+
+\section*{Number 2 (b)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{options}\hlstd{(}\hlkwc{digits}\hlstd{=}\hlnum{22}\hlstd{)}
+\hlstd{x} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlnum{1e-16}\hlstd{,} \hlnum{10000}\hlstd{))}
+\hlkwd{sum}\hlstd{(x)}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.000000000000999644811
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+It prints 1.000000000000999644811.
+
+The sum() does not give the right answer up to the accuracy expected
+from part (a).
+
+We have 12 decimal places of accuracy.
+
+
+\section*{Number 2 (c) : Python}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+import numpy as np 
+from decimal import Decimal
+vec=\hlkwd{np.array}([1e-16]*(10001)) 
+vec[0]=1 
+\hlkwd{print} (\hlkwd{np.sum}(vec))
+
+\hlcom{## 1.0}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+It prints 1.0.
+
+Summation in Python is even less accurate than in R.
+
+
+\section*{Number 2 (d)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{options}\hlstd{(}\hlkwc{digits}\hlstd{=}\hlnum{22}\hlstd{)}
+\hlstd{x} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlnum{1}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlnum{1e-16}\hlstd{,} \hlnum{10000}\hlstd{))}
+
+\hlcom{# first for loop}
+\hlstd{fl1} \hlkwb{<-} \hlnum{0}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(x)) \{}
+  \hlstd{fl1} \hlkwb{<-} \hlstd{fl1} \hlopt{+} \hlstd{x[i]}
+\hlstd{\}}
+\hlstd{fl1}
+\end{alltt}
+\begin{verbatim}
+## [1] 1
+\end{verbatim}
+\begin{alltt}
+\hlcom{# second for loop: do the summation with 1 as the last value in the vector}
+\hlstd{fl2} \hlkwb{<-} \hlnum{0}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{2}\hlopt{:}\hlkwd{length}\hlstd{(x)) \{}
+  \hlstd{fl2} \hlkwb{<-} \hlstd{fl2} \hlopt{+} \hlstd{x[i]}
+\hlstd{\}}
+\hlstd{fl2} \hlkwb{<-} \hlstd{fl2} \hlopt{+} \hlstd{x[}\hlnum{1}\hlstd{]}
+\hlstd{fl2}
+\end{alltt}
+\begin{verbatim}
+## [1] 1.000000000001000088901
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+The first for loop returns a wrong value (1).
+
+On the other hand, the second for loop returns a value that has 16
+decimal places of accuracy.
+
+
+\section*{Number 2 (d) : Python}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+vec = \hlkwd{np.array}([1e-16]*(10001)) 
+vec[0] = 1.0
+
+\hlcom{#first for loop}
+fl1 = 0 
+for i in \hlkwd{range}(\hlkwd{len}(vec)):
+  fl1 += vec[i] 
+\hlkwd{print}(\hlkwd{Decimal}(fl1))
+
+\hlcom{# second for loop: do the summation with 1 as the last value value in the vector}
+fl2 = 0 
+for i in \hlkwd{range}(1, \hlkwd{len}(vec)):
+  fl2 += vec[i] 
+fl2 = fl2 + vec[0] 
+\hlkwd{print}(\hlkwd{Decimal}(fl2))
+
+\hlcom{## 1 }
+\hlcom{## 1.0000000000010000889005823410116136074066162109375}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+The first for loop returns a wrong value (1) like in R.
+
+On the other hand, the second for loop returns the right value.
+
+
+\section*{Number 2 (e)}
+
+Apparently the results suggest that sum() does not simply sum the
+numbers from left to right.
+
+The result should have been the same in two for loops if it worked
+that way.
+
+The difference comes from the fact that we add 1 from the beginning
+or at last.
+
+Thus we can notice that sum() is more accurate when we sum up numbers
+with same magnitudes.
+
+It tries to be accurate up to 16 decimal places.
+
+
+\section*{Number 2 (f)}
+
+
+\end{document}
