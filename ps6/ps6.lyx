@@ -1,0 +1,508 @@
+#LyX 2.1 created this file. For more info see http://www.lyx.org/
+\lyxformat 474
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\begin_modules
+knitr
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_math auto
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_package amsmath 1
+\use_package amssymb 1
+\use_package cancel 1
+\use_package esint 1
+\use_package mathdots 1
+\use_package mathtools 1
+\use_package mhchem 1
+\use_package stackrel 1
+\use_package stmaryrd 1
+\use_package undertilde 1
+\cite_engine basic
+\cite_engine_type default
+\biblio_style plain
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\justification true
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\leftmargin 2.54cm
+\topmargin 2.54cm
+\rightmargin 2.54cm
+\bottommargin 2.54cm
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Stat 243
+\end_layout
+
+\begin_layout Title
+Problem Set 6
+\end_layout
+
+\begin_layout Author
+Stephanie Kim
+\end_layout
+
+\begin_layout Author
+github: stephaniesookim
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+/raggedright
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 1
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+library(RSQLite)
+\end_layout
+
+\begin_layout Plain Layout
+
+database <- dbConnect(SQLite(), dbname = "Airline_db.sqlite") 
+\end_layout
+
+\begin_layout Plain Layout
+
+years <- 1987:2008
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+system.time({
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# download each file in the url by year
+\end_layout
+
+\begin_layout Plain Layout
+
+for (i in 1:length(years)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+      url <- paste("http://www.stat.berkeley.edu/share/paciorek/", years[i],
+ ".csv.bz2", sep="")
+\end_layout
+
+\begin_layout Plain Layout
+
+      filename <- paste(years[i], ".csv.bz2", sep="")
+\end_layout
+
+\begin_layout Plain Layout
+
+      download.file(url, filename)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# read the table using the bzfile function and save it to a variable "data"
+\end_layout
+
+\begin_layout Plain Layout
+
+# I used the colClasses argument to control the type for the fields in the
+ table
+\end_layout
+
+\begin_layout Plain Layout
+
+      data <- read.table(bzfile(filename), sep = ",", head = TRUE,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                colClasses = c('integer', rep('factor',
+ 3), rep('integer', 4),
+\end_layout
+
+\begin_layout Plain Layout
+
+                                               'factor', 'integer', 'factor',
+ rep('integer',5),
+\end_layout
+
+\begin_layout Plain Layout
+
+                                               'factor', 'factor', rep('integer'
+, 4), 'factor',
+\end_layout
+
+\begin_layout Plain Layout
+
+                                               rep('integer', 6)))
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# I replaced the missing values (N/A) in DepDelay column with 0
+\end_layout
+
+\begin_layout Plain Layout
+
+      data$DepDelay[is.na(data$DepDelay)] <- 0
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# create a new database by writing a table using dbWriteTable function
+\end_layout
+
+\begin_layout Plain Layout
+
+      dbWriteTable(conn = database, name = "data", value = data,
+\end_layout
+
+\begin_layout Plain Layout
+
+                   row.names=FALSE, header=TRUE, append=TRUE,
+\end_layout
+
+\begin_layout Plain Layout
+
+                   colClasses = c('integer', rep('factor', 3), rep('integer',
+ 4),
+\end_layout
+
+\begin_layout Plain Layout
+
+                                 'factor', 'integer', 'factor', rep('integer',5)
+,
+\end_layout
+
+\begin_layout Plain Layout
+
+                                 'factor', 'factor', rep('integer', 4),
+ 'factor',
+\end_layout
+
+\begin_layout Plain Layout
+
+                                  rep('integer', 6)))
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+})
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# now go back to Ubuntu on terminal and test for the size of the database
+\end_layout
+
+\begin_layout Plain Layout
+
+# ls -l Airline_db.sqlite
+\end_layout
+
+\begin_layout Plain Layout
+
+# -rw-r--r-- 1 ubuntu ubuntu 9631064064
+\end_layout
+
+\begin_layout Plain Layout
+
+# The database file is 9631064064 bytes
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 2
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 3
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Number 4
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+<<eval=FALSE>>=
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# download the zipped from the url
+\end_layout
+
+\begin_layout Plain Layout
+
+wget http://www.stat.berkeley.edu/share/paciorek/1987-2008.csvs.tgz
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# unzip the file using the bzip2 function
+\end_layout
+
+\begin_layout Plain Layout
+
+bzip2 -d $(tar zxvf 1987-2008.csvs.tgz)
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# extract the SFO/OAK flights, save it to 4.txt, and measure the time it
+ takes to run the code
+\end_layout
+
+\begin_layout Plain Layout
+
+time awk -F ',' -v OFS=',' '{ if ($17=="SFO" || $17=="OAK") print $0;}'
+ *.csv > 4.txt
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+# real	4m1.146s
+\end_layout
+
+\begin_layout Plain Layout
+
+# user	3m51.658s
+\end_layout
+
+\begin_layout Plain Layout
+
+# sys	 0m6.209s
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+@
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

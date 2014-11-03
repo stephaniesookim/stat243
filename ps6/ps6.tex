@@ -1,0 +1,155 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/ps6//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat 243}
+
+
+\title{Problem Set 6}
+
+
+\author{Stephanie Kim}
+
+
+\author{github: stephaniesookim}
+
+\maketitle
+/raggedright
+
+
+\section*{Number 1}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(RSQLite)}
+\hlstd{database} \hlkwb{<-} \hlkwd{dbConnect}\hlstd{(}\hlkwd{SQLite}\hlstd{(),} \hlkwc{dbname} \hlstd{=} \hlstr{"Airline_db.sqlite"}\hlstd{)}
+\hlstd{years} \hlkwb{<-} \hlnum{1987}\hlopt{:}\hlnum{2008}
+
+\hlkwd{system.time}\hlstd{(\{}
+
+\hlcom{# download each file in the url by year}
+\hlkwa{for} \hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{length}\hlstd{(years)) \{}
+      \hlstd{url} \hlkwb{<-} \hlkwd{paste}\hlstd{(}\hlstr{"http://www.stat.berkeley.edu/share/paciorek/"}\hlstd{, years[i],} \hlstr{".csv.bz2"}\hlstd{,} \hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{)}
+      \hlstd{filename} \hlkwb{<-} \hlkwd{paste}\hlstd{(years[i],} \hlstr{".csv.bz2"}\hlstd{,} \hlkwc{sep}\hlstd{=}\hlstr{""}\hlstd{)}
+      \hlkwd{download.file}\hlstd{(url, filename)}
+
+\hlcom{# read the table using the bzfile function and save it to a variable "data"}
+\hlcom{# I used the colClasses argument to control the type for the fields in the table}
+      \hlstd{data} \hlkwb{<-} \hlkwd{read.table}\hlstd{(}\hlkwd{bzfile}\hlstd{(filename),} \hlkwc{sep} \hlstd{=} \hlstr{","}\hlstd{,} \hlkwc{head} \hlstd{=} \hlnum{TRUE}\hlstd{,}
+                                \hlkwc{colClasses} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlstr{'factor'}\hlstd{,} \hlnum{3}\hlstd{),} \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlnum{4}\hlstd{),}
+                                               \hlstr{'factor'}\hlstd{,} \hlstr{'integer'}\hlstd{,} \hlstr{'factor'}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,}\hlnum{5}\hlstd{),}
+                                               \hlstr{'factor'}\hlstd{,} \hlstr{'factor'}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlnum{4}\hlstd{),} \hlstr{'factor'}\hlstd{,}
+                                               \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlnum{6}\hlstd{)))}
+
+\hlcom{# I replaced the missing values (N/A) in DepDelay column with 0}
+      \hlstd{data}\hlopt{$}\hlstd{DepDelay[}\hlkwd{is.na}\hlstd{(data}\hlopt{$}\hlstd{DepDelay)]} \hlkwb{<-} \hlnum{0}
+
+\hlcom{# create a new database by writing a table using dbWriteTable function}
+      \hlkwd{dbWriteTable}\hlstd{(}\hlkwc{conn} \hlstd{= database,} \hlkwc{name} \hlstd{=} \hlstr{"data"}\hlstd{,} \hlkwc{value} \hlstd{= data,}
+                   \hlkwc{row.names}\hlstd{=}\hlnum{FALSE}\hlstd{,} \hlkwc{header}\hlstd{=}\hlnum{TRUE}\hlstd{,} \hlkwc{append}\hlstd{=}\hlnum{TRUE}\hlstd{,}
+                   \hlkwc{colClasses} \hlstd{=} \hlkwd{c}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlstr{'factor'}\hlstd{,} \hlnum{3}\hlstd{),} \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlnum{4}\hlstd{),}
+                                 \hlstr{'factor'}\hlstd{,} \hlstr{'integer'}\hlstd{,} \hlstr{'factor'}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,}\hlnum{5}\hlstd{),}
+                                 \hlstr{'factor'}\hlstd{,} \hlstr{'factor'}\hlstd{,} \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlnum{4}\hlstd{),} \hlstr{'factor'}\hlstd{,}
+                                  \hlkwd{rep}\hlstd{(}\hlstr{'integer'}\hlstd{,} \hlnum{6}\hlstd{)))}
+        \hlstd{\}}
+\hlstd{\})}
+
+\hlcom{# now go back to Ubuntu on terminal and test for the size of the database}
+\hlcom{# ls -l Airline_db.sqlite}
+\hlcom{# -rw-r--r-- 1 ubuntu ubuntu 9631064064}
+\hlcom{# The database file is 9631064064 bytes}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Number 2}
+
+
+
+
+\section*{Number 3}
+
+
+
+
+\section*{Number 4}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# download the zipped from the url}
+wget http://www.stat.berkeley.edu/share/paciorek/1987-2008.csvs.tgz
+
+\hlcom{# unzip the file using the bzip2 function}
+bzip2 -d $(tar zxvf 1987-2008.csvs.tgz)
+
+\hlcom{# extract the SFO/OAK flights, save it to 4.txt, and measure the time it takes to run the code}
+time awk -F \hlstr{','} -v OFS=\hlstr{','} \hlstr{'\{ \hlkwd{if} ($17==\hlstr{"SFO"} || $17==\hlstr{"OAK"}) print $0;\}'} *.csv > 4.txt
+
+\hlcom{# real	4m1.146s}
+\hlcom{# user	3m51.658s}
+\hlcom{# sys	 0m6.209s}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+\end{document}
