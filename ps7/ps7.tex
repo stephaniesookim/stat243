@@ -1,0 +1,233 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/ps7//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat 243}
+
+
+\title{Problem Set 7}
+
+
+\author{Stephanie Kim}
+
+
+\author{github: stephaniesookim}
+
+\maketitle
+/raggedright
+
+
+\section*{Number 1}
+
+I apologize for late submittance of number 1. I was unaware that I
+should have submitted by monday.
+
+
+\paragraph*{1. What are the goals of their simulation study and what are the
+metrics that they consider in assessing their method?}
+
+The purpose of the simulation study is first to assess the accuracy
+of the proposed asymptotic approximation in finite samples and second
+to examine the power of the EM test.
+
+The metrics they considered are the power of the EM and type I error.
+
+
+\paragraph*{2. What choices did the authors have to make in designing their simulation
+study? What are the key aspects of the data generating mechanism that
+likely affect the statistical power of the test?}
+
+The authors made choices of the sample sizes (200 and 400), the significance
+levels (5\% and 1\%), the number of repetitions (1000), the number
+of iterations, etc.
+
+The key aspects of the data generating mechanism that are likely to
+affect the statistical power of the test are the sample size, the
+component means, variances.
+
+
+\paragraph*{3. Interpret their tables on power (Tables 4 and 6) - do the results
+make sense in terms of how the power varies as a function of the data
+generating mechanism?}
+
+From both tables 4 and 6, we can observe that the power is greater
+when the sample size is larger and m is larger. The results make sense. 
+
+
+\section*{Number 2}
+
+Submitting by hard-copy
+
+
+\section*{Number 3 (a)}
+
+The most efficient way is to multiply the diagonal entries of D and
+X 
+
+<<eval=FALSE>>
+
+
+X <- matrix(1:30, 5, 6) 
+D <- diag(1:5) 
+DX <- diag(D) * X 
+DX
+
+@
+
+
+\section*{Number 3 (b)}
+
+\# The most efficient way is to use transpose of X and diagonal entries
+and take a transpose of it again
+
+<<eval=FALSE>>
+
+ 
+X <- matrix(1:30, 5, 6) 
+D <- diag(1:5) 
+XD <- t(t(X) * diag(D)) 
+XD
+
+@
+
+
+\section*{Number 4}
+
+(a)
+
+The number of flops involved in the forward reduction step of the
+LU decomposition can be counted step by step.
+
+
+
+The first step produces 0's of which each 0 requires 1 multiplication
+and 1 subtraction.
+
+Thus there will be n\textasciicircum{}2 flops.
+
+
+
+Similarly, in the second step there will be (n-1)\textasciicircum{}2
+flops.
+
+
+
+Thus, the total number of flops can be calculated as n\textasciicircum{}2
++ (n-1)\textasciicircum{}2 + ... + 2\textasciicircum{}2 + 1\textasciicircum{}2
+
+which is approximately 1/3{*}n\textasciicircum{}3.
+
+
+
+Cholesky decomposition requires O(n\textasciicircum{}3) + (1/6{*}n\textasciicircum{}3)
+calculations.
+
+Thus Cholesky is more efficient
+
+
+
+(b)
+
+1+2+...+(n-1)+n = 1/2{*}n(n+1) flops
+
+
+
+(c)
+
+The flops will be added by p in (a) while it will be multiplied by
+p in (b)
+
+
+
+(d)
+
+
+\section*{Number 5}
+
+We calculate beta hat by using qr, backsolve, crossprod functions.
+
+beta\_hat <- function(X, Y, A, b) \{
+
+  X.qr = qr(X)
+
+  R = qr.R(X.qr)
+
+  Q = qr.Q(X.qr)
+
+  first = backsolve(R, crossprod(Q, Y))
+
+  second = tcrossprod(solve(crossprod(R)), A)
+
+third = solve(A \%{*}\% solve(R) \%{*}\% t(AR\_1))
+
+  fourth = -A \%{*}\% first + b
+
+  betahat = first + second \%{*}\% third \%{*}\% fourth
+
+  return(betahat)
+
+\} <<eval=FALSE>>
+
+
+
+
+@
+\end{document}
