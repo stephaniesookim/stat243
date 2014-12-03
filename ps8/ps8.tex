@@ -1,0 +1,283 @@
+\batchmode
+\makeatletter
+\def\input@path{{/Users/stephaniekim/Desktop//}}
+\makeatother
+\documentclass[english]{article}\usepackage[]{graphicx}\usepackage[]{color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\definecolor{fgcolor}{rgb}{0.345, 0.345, 0.345}
+\newcommand{\hlnum}[1]{\textcolor[rgb]{0.686,0.059,0.569}{#1}}%
+\newcommand{\hlstr}[1]{\textcolor[rgb]{0.192,0.494,0.8}{#1}}%
+\newcommand{\hlcom}[1]{\textcolor[rgb]{0.678,0.584,0.686}{\textit{#1}}}%
+\newcommand{\hlopt}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlstd}[1]{\textcolor[rgb]{0.345,0.345,0.345}{#1}}%
+\newcommand{\hlkwa}[1]{\textcolor[rgb]{0.161,0.373,0.58}{\textbf{#1}}}%
+\newcommand{\hlkwb}[1]{\textcolor[rgb]{0.69,0.353,0.396}{#1}}%
+\newcommand{\hlkwc}[1]{\textcolor[rgb]{0.333,0.667,0.333}{#1}}%
+\newcommand{\hlkwd}[1]{\textcolor[rgb]{0.737,0.353,0.396}{\textbf{#1}}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+\usepackage[T1]{fontenc}
+\usepackage[latin9]{inputenc}
+\usepackage{geometry}
+\geometry{verbose,tmargin=2.54cm,bmargin=2.54cm,lmargin=2.54cm,rmargin=2.54cm}
+\usepackage{babel}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\begin{document}
+
+\title{Stat243}
+
+
+\title{Problem Set 8}
+
+
+\author{Stephanie Kim}
+
+\maketitle
+/raggedright
+
+
+\section*{Question 1 (a) }
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{library}\hlstd{(}\hlstr{"truncnorm"}\hlstd{)}
+
+\hlkwd{set.seed}\hlstd{(}\hlnum{0}\hlstd{)}
+
+\hlcom{# Let h be the set of 10000 random numbers from truncated normal distribution}
+\hlstd{h} \hlkwb{<-} \hlkwd{rtruncnorm} \hlstd{(}\hlkwc{n}\hlstd{=}\hlnum{10000}\hlstd{,} \hlkwc{a}\hlstd{=}\hlopt{-}\hlnum{Inf}\hlstd{,} \hlkwc{b}\hlstd{=}\hlopt{-}\hlnum{4}\hlstd{,} \hlkwc{mean}\hlstd{=}\hlopt{-}\hlnum{4}\hlstd{,} \hlkwc{sd}\hlstd{=}\hlnum{1}\hlstd{)}
+
+\hlcom{# Let f be the rescaled truncated t-distribution density composed of the random numbers }
+\hlstd{pdf} \hlkwb{<-} \hlkwd{dt}\hlstd{(h,} \hlkwc{df}\hlstd{=}\hlnum{3}\hlstd{)}
+\hlstd{cdf} \hlkwb{<-} \hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{4}\hlstd{,} \hlkwc{df}\hlstd{=}\hlnum{3}\hlstd{)}
+\hlstd{f} \hlkwb{<-} \hlstd{pdf}\hlopt{/}\hlstd{cdf}
+
+\hlcom{# Let g be the truncated normal distribution density}
+\hlstd{g} \hlkwb{<-} \hlkwd{dtruncnorm}\hlstd{(h,} \hlkwc{b}\hlstd{=}\hlopt{-}\hlnum{4}\hlstd{,} \hlkwc{mean}\hlstd{=}\hlopt{-}\hlnum{4}\hlstd{)}
+
+\hlcom{# Then the importance sampling estimate of mean of h is mean(h*f/g)}
+\hlstd{estimate} \hlkwb{<-} \hlkwd{mean}\hlstd{(h}\hlopt{*}\hlstd{f}\hlopt{/}\hlstd{g)}
+
+\hlkwd{hist}\hlstd{(h}\hlopt{*}\hlstd{f}\hlopt{/}\hlstd{g)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-11} 
+\begin{kframe}\begin{alltt}
+\hlkwd{hist}\hlstd{(f}\hlopt{/}\hlstd{g)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-12} 
+\begin{kframe}\begin{alltt}
+\hlcom{# We can observe that there are a lot of extreme weights}
+\hlcom{# Thus the variance of estimate is large}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Question 1 (b)}
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlkwd{set.seed}\hlstd{(}\hlnum{0}\hlstd{)}
+
+\hlcom{# Let h be the set of 10000 random numbers from truncated t distribution}
+\hlstd{h} \hlkwb{<-} \hlkwd{rt}\hlstd{(}\hlkwc{n}\hlstd{=}\hlnum{10000}\hlstd{,} \hlkwc{df}\hlstd{=}\hlnum{3}\hlstd{)}
+\hlstd{h} \hlkwb{<-} \hlopt{-}\hlkwd{abs}\hlstd{(x)}\hlopt{-}\hlnum{4}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'x' not found}}\begin{alltt}
+\hlcom{# Let f be the rescaled truncated t-distribution density composed of the random numbers}
+\hlstd{pdf} \hlkwb{<-} \hlkwd{dt}\hlstd{(h,} \hlkwc{df}\hlstd{=}\hlnum{3}\hlstd{)}
+\hlstd{cdf} \hlkwb{<-} \hlkwd{pt}\hlstd{(}\hlopt{-}\hlnum{4}\hlstd{,} \hlkwc{df}\hlstd{=}\hlnum{3}\hlstd{)}
+\hlstd{f} \hlkwb{<-} \hlstd{pdf}\hlopt{/}\hlstd{cdf}
+
+\hlcom{# Let g be the t-distirubtion }
+\hlstd{g} \hlkwb{<-} \hlkwd{dt}\hlstd{(h}\hlopt{+}\hlnum{4}\hlstd{,} \hlkwc{df}\hlstd{=}\hlnum{3}\hlstd{)}\hlopt{*}\hlnum{2}
+
+\hlcom{# Then the importance sampling estimate of mean of h is mean(h*f/g)}
+\hlstd{estimate} \hlkwb{<-} \hlkwd{mean}\hlstd{(h}\hlopt{*}\hlstd{f}\hlopt{/}\hlstd{g)}
+
+\hlkwd{hist}\hlstd{(h}\hlopt{*}\hlstd{f}\hlopt{/}\hlstd{g)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-21} 
+\begin{kframe}\begin{alltt}
+\hlkwd{hist}\hlstd{(f}\hlopt{/}\hlstd{g)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-22} 
+\begin{kframe}\begin{alltt}
+\hlcom{# Relative to 1(a), there are less extreme weights}
+\hlcom{# Thus the variance of estimate is smaller}
+\end{alltt}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Question 2 (a)}
+
+Plot slices of the function to get a sense for how it behaves.
+
+For a constant value of one of the inputs, plot as a 2-d function
+of the other two.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# this is the given code}
+\hlstd{theta} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x1}\hlstd{,}\hlkwc{x2}\hlstd{)} \hlkwd{atan2}\hlstd{(x2, x1)}\hlopt{/}\hlstd{(}\hlnum{2}\hlopt{*}\hlstd{pi)}
+
+\hlstd{helical} \hlkwb{<-} \hlkwa{function}\hlstd{(}\hlkwc{x}\hlstd{)\{}
+  \hlstd{f1} \hlkwb{<-} \hlnum{10}\hlopt{*}\hlstd{(x[}\hlnum{3}\hlstd{]} \hlopt{-} \hlnum{10}\hlopt{*}\hlkwd{theta}\hlstd{(x[}\hlnum{1}\hlstd{],x[}\hlnum{2}\hlstd{]))}
+  \hlstd{f2} \hlkwb{<-} \hlnum{10}\hlopt{*}\hlstd{(}\hlkwd{sqrt}\hlstd{(x[}\hlnum{1}\hlstd{]}\hlopt{^}\hlnum{2}\hlopt{+}\hlstd{x[}\hlnum{2}\hlstd{]}\hlopt{^}\hlnum{2}\hlstd{)}\hlopt{-}\hlnum{1}\hlstd{)}
+  \hlstd{f3} \hlkwb{<-} \hlstd{x[}\hlnum{3}\hlstd{]}
+  \hlkwd{return}\hlstd{(f1}\hlopt{^}\hlnum{2}\hlopt{+}\hlstd{f2}\hlopt{^}\hlnum{2}\hlopt{+}\hlstd{f3}\hlopt{^}\hlnum{2}\hlstd{)}
+\hlstd{\}}
+
+\hlcom{# set the bounds of the function we want to plot}
+\hlstd{bounds} \hlkwb{<-} \hlstd{(}\hlopt{-}\hlnum{50}\hlopt{:}\hlnum{50}\hlstd{)}
+\hlstd{n} \hlkwb{<-} \hlkwd{length}\hlstd{(bounds)}
+
+\hlcom{# we make 3 empty matrices}
+\hlstd{matrix1} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,n,n)}
+\hlstd{matrix2} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,n,n)}
+\hlstd{matrix3} \hlkwb{<-} \hlkwd{matrix}\hlstd{(}\hlnum{0}\hlstd{,n,n)}
+
+\hlcom{# (i,j)th element of matrix1 will give the function output when the first input is a constant }
+\hlcom{# (i,j)th element of matrix2 will give the function output when the second input is a constant }
+\hlcom{# (i,j)th element of matrix2 will give the function output when the third input is a constant }
+\hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
+  \hlkwa{for}\hlstd{(j} \hlkwa{in} \hlnum{1}\hlopt{:}\hlstd{n)\{}
+    \hlstd{matrix1[i,j]} \hlkwb{<-} \hlkwd{helical}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,bounds[i], bounds[j]))}
+    \hlstd{matrix2[i,j]} \hlkwb{<-} \hlkwd{helical}\hlstd{(}\hlkwd{c}\hlstd{(bounds[i],}\hlnum{0}\hlstd{,bounds[j]))}
+    \hlstd{matrix3[i,j]} \hlkwb{<-} \hlkwd{helical}\hlstd{(}\hlkwd{c}\hlstd{(bounds[i], bounds[j],}\hlnum{0}\hlstd{))}
+  \hlstd{\}}
+\hlstd{\}}
+
+\hlkwd{library}\hlstd{(}\hlstr{"reshape2"}\hlstd{)}
+\hlkwd{library}\hlstd{(}\hlstr{"lattice"}\hlstd{)}
+
+\hlcom{# by using melt and levelplot functions,  }
+\hlcom{# we can plot the output in 2-d function of the other two }
+\hlstd{plot1} \hlkwb{<-} \hlkwd{melt}\hlstd{(matrix1)}
+\hlkwd{names}\hlstd{(plot1)} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"x2"}\hlstd{,} \hlstr{"x3"}\hlstd{,} \hlstr{"value"}\hlstd{)}
+\hlkwd{levelplot}\hlstd{(value} \hlopt{~} \hlstd{x2} \hlopt{+} \hlstd{x3,} \hlkwc{data}\hlstd{=plot1)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-31} 
+\begin{kframe}\begin{alltt}
+\hlstd{plot2} \hlkwb{<-} \hlkwd{melt}\hlstd{(matrix2)}
+\hlkwd{names}\hlstd{(plot2)} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"x1"}\hlstd{,} \hlstr{"x3"}\hlstd{,} \hlstr{"value"}\hlstd{)}
+\hlkwd{levelplot}\hlstd{(value} \hlopt{~} \hlstd{x1} \hlopt{+} \hlstd{x3,} \hlkwc{data}\hlstd{=plot2)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-32} 
+\begin{kframe}\begin{alltt}
+\hlstd{plot3} \hlkwb{<-} \hlkwd{melt}\hlstd{(matrix3)}
+\hlkwd{names}\hlstd{(plot3)} \hlkwb{<-} \hlkwd{c}\hlstd{(}\hlstr{"x1"}\hlstd{,} \hlstr{"x2"}\hlstd{,} \hlstr{"value"}\hlstd{)}
+\hlkwd{levelplot}\hlstd{(value} \hlopt{~} \hlstd{x1} \hlopt{+} \hlstd{x2,} \hlkwc{data}\hlstd{=plot3)}
+\end{alltt}
+\end{kframe}
+\includegraphics[width=\maxwidth]{figure/unnamed-chunk-33} 
+
+\end{knitrout}
+
+
+\section*{Question 2 (b)}
+
+Try out optim() and nlm() for finding the minimum of this function
+(or use optimx()).  
+
+Explore the possibility of multiple local minima by using different
+starting points.
+
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcom{# first set the starting points in each row}
+\hlstd{stpts} \hlkwb{<-} \hlkwd{t}\hlstd{(}\hlkwd{matrix}\hlstd{(}\hlkwd{c}\hlstd{(}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{0}\hlstd{,}\hlnum{10}\hlstd{,}\hlnum{10}\hlstd{,}\hlnum{10}\hlstd{,}\hlnum{100}\hlstd{,}\hlnum{100}\hlstd{,}\hlnum{100}\hlstd{),}\hlkwc{nrow}\hlstd{=}\hlnum{3}\hlstd{,}\hlkwc{ncol}\hlstd{=}\hlnum{3}\hlstd{))}
+\hlstd{maxit} \hlkwb{<-} \hlnum{10000}
+
+\hlcom{# the following for loop gives us the local minima using optim() and nlm() for each row}
+\hlkwa{for}\hlstd{(i} \hlkwa{in} \hlnum{1}\hlopt{:}\hlkwd{nrow}\hlstd{(stpts))\{}
+  \hlstd{stpt} \hlkwb{<-} \hlstd{stpts[i,]}
+
+  \hlcom{#optimize using optim()}
+  \hlstd{ctrl} \hlkwb{<-} \hlkwd{list}\hlstd{(}\hlkwc{maxit}\hlstd{=maxit,} \hlkwc{trace}\hlstd{=}\hlnum{FALSE}\hlstd{)}
+  \hlstd{optimmin} \hlkwb{<-} \hlkwd{optim}\hlstd{(}\hlkwc{par}\hlstd{=stpt,} \hlkwc{fn}\hlstd{=helical,} \hlkwc{method}\hlstd{=}\hlstr{'BFGS'}\hlstd{,} \hlkwc{control}\hlstd{=ctrl)}
+
+  \hlcom{# nlm()}
+  \hlstd{nlmmin} \hlkwb{<-} \hlkwd{nlm}\hlstd{(}\hlkwc{f}\hlstd{=helical,} \hlkwc{p}\hlstd{=stpt)}
+
+ \hlkwd{cat}\hlstd{(}\hlstr{"starting point"}\hlstd{, stpt,} \hlstr{"\textbackslash{}n"}\hlstd{,} \hlstr{"optim:"}\hlstd{, optimmin}\hlopt{$}\hlstd{par,} \hlstr{"\textbackslash{}n"}\hlstd{,} \hlstr{"nlm():"}\hlstd{, nlmmin}\hlopt{$}\hlstd{estimate,} \hlstr{"\textbackslash{}n"}\hlstd{)}
+\hlstd{\}}
+\end{alltt}
+\begin{verbatim}
+## starting point 0 0 0 
+##  optim: 1 0 0 
+##  nlm(): 0 0 0 
+## starting point 10 10 10 
+##  optim: 1 1.22e-08 1.944e-08 
+##  nlm(): 1 2.419e-10 3.472e-10 
+## starting point 100 100 100 
+##  optim: 1 -6.247e-11 -1.008e-10 
+##  nlm(): 1 2.38e-09 5.289e-09
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+
+\section*{Question 3 (a)}
+
+submitting by hand
+
+
+\section*{Question 3 (b)}
+
+We can run a simple regression on the actual data that is not censored
+and get the whole normal distribution.
+
+Then we can get the values of beta0, beta1, and sigma\textasciicircum{}2.
+
+These should be reasonable starting values for those parameters.
+\end{document}
